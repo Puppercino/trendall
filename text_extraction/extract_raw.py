@@ -4,18 +4,11 @@ import sys
 import pdfplumber
 import spacy
 
-# Load the English language model
-nlp = spacy.load("en_core_web_sm")
-
-pdf_path = "RVP.pdf"  # Add RVP.pdf to the same directory as this file
-if not os.path.exists(pdf_path):
-    print("PDF file path not found!")
-    sys.exit(1)
-
-
 RECORD_TEXT_SIZE = 9.01
 RECORD_INDENT = 61  # Records are indented at start
 HEADER_HEIGHT = 48
+
+pdf_path = "RVP.pdf"  # Add RVP.pdf to the same directory as this file
 
 
 def get_raw_record(outputFile):
@@ -50,6 +43,21 @@ def get_raw_record(outputFile):
                         else:
                             out.write(text)
 
+
+# Load the English language model
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError as e:
+    # Download model if it doesn't exist.
+    print("OS error: {0}".format(e))
+    print("Downloading pipeline for English language...")
+    spacy.cli.download("en_core_web_sm")
+    print("Download complete.")
+    nlp = spacy.load('en_core_web_sm')
+
+if not os.path.exists(pdf_path):
+    print("PDF file path not found!")
+    sys.exit(1)
 
 # Calling FilterFontSize function 3 times, for the 3 parts in the RVP with the specified startPage and endPage for each part
 # FilterFontSize(55, 82, "Part1.txt")
