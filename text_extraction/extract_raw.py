@@ -1,11 +1,13 @@
-import os, sys
+import os
+import sys
+
 import pdfplumber
-import spacy 
+import spacy
 
 # Load the English language model
 nlp = spacy.load("en_core_web_sm")
 
-pdf_path = "RVP.pdf" # Add RVP.pdf to the same directory as this file
+pdf_path = "RVP.pdf"  # Add RVP.pdf to the same directory as this file
 if not os.path.exists(pdf_path):
     print("PDF file path not found!")
     sys.exit(1)
