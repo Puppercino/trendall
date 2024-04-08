@@ -6,55 +6,42 @@ with open("shapes.txt") as f:
     shape_list = [line.strip() for line in f if line.strip()]
 
 
-def init_record_list(filename):
-    record_list = []
-    with open(filename) as f:
-        record_list = f.read().split("\n\n")
-        return record_list
+def init_record_list(raw_record_file):
+    raw_list = []
+    with open(raw_record_file) as f:
+        raw_list = (
+            f.read()
+            .replace("[", "(")
+            .replace("]", ")")
+            .replace("{", "(")
+            .replace("}", ")")
+        ).split("\n\n")
+        return raw_list
 
 
 li = init_record_list("raw_records.txt")
-# print(len(li))
 
 
 # Remove false records IF they don't start with a number/asterisk/bullet OR if they aren't shapes
 def clean_record_list(record_list):
+    text_regex = r"^(?!\d+|\*|\•).*"
+    record_regex = r" Once | coll|, from |\) from |\. Ht\. |, Ht\. |\. Ht |\. ht\. |; ht\. | Diam\. | diam\. | PLATE|(a)"
 
-    regExp = "^(?!\\d+|\\*|\\•).*"
-    for i in range(len(record_list)):
-        if re.search(regExp, record_list[i]):
-            if record_list[i].upper().strip() in shape_list:
-                record_list[i] = "SHAPE: " + record_list[i]
+    for i, record in enumerate(record_list):
+        # Remove paragraph lines
+        if re.search(text_regex, record):
+            if record.upper().strip() in shape_list:
+                record_list[i] = f"SHAPE: {record}"
+            else:
+                record_list[i] = ""
+        # Remove paragraph lines starting with a number and not records
+        else:
+            if re.search(record_regex, record):
+                record_list[i] = record
             else:
                 record_list[i] = ""
 
-    while "" in record_list:
-        record_list.remove("")
-
-    # removing paragraph lines that start with a number
-    # if it doesn't contain any entry terms, remove.
-    regFrom = r", from | from [A-Z]"
-    for i in range(len(record_list)):
-        breakPoints = [
-            " Ht.",
-            " ht.",
-            " Ht",
-            " Diam. c.",
-            " Diam",
-            " diam",
-            " PLATE",
-            "(a)",
-            "[a)",
-            "SHAPE: ",
-        ]
-        if not any(breakPoint in record_list[i] for breakPoint in breakPoints):
-            if re.search(regFrom, record_list[i]):
-                record_list[i] = record_list[i]
-            else:
-                record_list[i] = ""
-
-    while "" in record_list:
-        record_list.remove("")
+    record_list = [record for record in record_list if record != ""]
     return record_list
 
 
