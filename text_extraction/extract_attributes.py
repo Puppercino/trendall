@@ -34,9 +34,10 @@ def clean_record_list(record_list):
                 record_list[i] = f"SHAPE: {record}"
             else:
                 record_list[i] = ""
-        # Remove paragraph lines starting with a number and not records
+        # Records have more than 1 row
         elif "\n" in record:
             record_list[i] = record
+        # Remove paragraph lines starting with a number and not records
         elif re.search(record_regex, record):
             record_list[i] = record
         else:
