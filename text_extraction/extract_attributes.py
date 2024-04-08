@@ -25,7 +25,7 @@ li = init_record_list("raw_records.txt")
 # Remove false records IF they don't start with a number/asterisk/bullet OR if they aren't shapes
 def clean_record_list(record_list):
     text_regex = r"^(?!\d+|\*|\•).*"
-    record_regex = r" Once | coll|, from |\) from |\. Ht\. |, Ht\. |\. Ht |\. ht\. |; ht\. | Diam\. | diam\. | PLATE|(a)"
+    record_regex = r" Once | once | coll.|, from |\) from |\. Ht\. |, Ht\. |\. Ht |\. ht\. |; ht\. | Diam\. | diam\. | PLATE|\(a\)"
 
     for i, record in enumerate(record_list):
         # Remove paragraph lines
@@ -35,11 +35,12 @@ def clean_record_list(record_list):
             else:
                 record_list[i] = ""
         # Remove paragraph lines starting with a number and not records
+        elif "\n" in record:
+            record_list[i] = record
+        elif re.search(record_regex, record):
+            record_list[i] = record
         else:
-            if re.search(record_regex, record):
-                record_list[i] = record
-            else:
-                record_list[i] = ""
+            record_list[i] = ""
 
     record_list = [record for record in record_list if record != ""]
     return record_list
