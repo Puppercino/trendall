@@ -20,7 +20,7 @@ def clean_record_list(raw_list):
         # Remove paragraph lines
         if re.search(text_regex, record):
             if record.upper().strip() in shape_list:
-                raw_list[i] = record
+                raw_list[i] = f"SHAPE: {record}"
             else:
                 raw_list[i] = ""
         # Records have more than 1 row
@@ -37,19 +37,29 @@ def clean_record_list(raw_list):
 
 
 record_list = clean_record_list(record_list)
-# with open("list.txt", "w") as f:
-#     for item in record_list:
-#         f.write(item + "\n\n")
 
-# Sort records based on shape
-shape_based_list = {}
-for record in record_list:
-    if record.upper().strip() in shape_list:
-        shape = record.upper()
-        if shape not in shape_based_list:
-            shape_based_list[shape] = []
-    elif shape:
-        shape_based_list[shape].append(record)
+
+def get_ref(record):
+    ref = record.split(sep=" ", maxsplit=1)[0]
+    ref = ref.replace("*", "").replace("•", "")
+
+    return ref
+
+
+def get_shape(record):
+    shape = None
+    for i, record_it in enumerate(record_list):
+        if record_it == record:
+            break
+
+    while i >= 0:
+        if "SHAPE" in record_list[i]:
+            shape = record_list[i].split(":")[1].strip()
+            break
+        else:
+            i -= 1
+
+    return shape
 
 
 def get_curr_coll(record):
@@ -78,19 +88,28 @@ def get_curr_coll(record):
     if re.search(startLine, locationOnwards):
         locationOnwards = locationOnwards.split(sep=" ", maxsplit=1)[1].strip()
     if any(point in record for point in break_points):
-        curr = re.split(locRegex, locationOnwards)[0]
+        curr_coll = re.split(locRegex, locationOnwards)[0]
     else:
-        curr = locationOnwards.split(sep="\n", maxsplit=1)[0].strip()
+        curr_coll = locationOnwards.split(sep="\n", maxsplit=1)[0].strip()
 
     # removing 'from' in Location
-    if " from " in curr:
-        curr = curr.split(sep=" from ", maxsplit=1)[0]
+    if " from " in curr_coll:
+        curr_coll = curr_coll.split(sep=" from ", maxsplit=1)[0]
 
-    return curr.replace("\n", "")
+    curr_coll = curr_coll.replace("\n", "").rstrip("., ")
+
+    return curr_coll
 
 
 def get_prev_coll(location):
-    regPrev = r"\(ex |ex "
+    regPrev = r"\(ex |, ex |; ex "
+    break_points = [
+        ")",
+        " Ht.",
+        " Diam.",
+        " PLATE",
+        "\n",
+    ]
     if location.startswith("(a)"):
         location = ""
 
@@ -108,9 +127,9 @@ def get_prev_coll(location):
         prev = ""
 
     if not "(" in prev:
-        prev = prev.replace(").", "")
+        prev = prev.replace(").", "").replace("\n", "").rstrip("., ")
 
-    return prev.replace("\n", "")
+    return prev
 
 
 def get_provenance(record):
@@ -156,7 +175,7 @@ def get_provenance(record):
             provenance = provenance[:index].strip()
             break
 
-    return provenance
+    return provenance.rstrip("., ")
 
 
 def get_height(record):
@@ -207,8 +226,8 @@ def get_diameter(record):
 
 def get_plate(record):
     # Plate starts after "PLATE/PLATES"
-    plate_regex = r"PLATES|PLATE"
-    break_points = ["PLATES", "PLATE"]
+    plate_regex = r"PLATE|PLATES|PLATED"
+    break_points = ["PLATE"]
     if any(point in record for point in break_points):
         plate_value = re.split(plate_regex, record)[1].strip()
         plate = plate_value.split("\n", maxsplit=1)[0].strip()
@@ -218,7 +237,7 @@ def get_plate(record):
 
 
 # Converting Plate into number format for database image reference
-def Convert_Plate(Plate, referenceNo, imagePlate, refImage):
+def match_plate(Plate, referenceNo, imagePlate, refImage):
     NewPlate = []
     Text = ""
 
@@ -265,61 +284,63 @@ def Convert_Plate(Plate, referenceNo, imagePlate, refImage):
         refImage.remove("")
 
 
-# def get_publication(record):
-#     pubs = []
-#     checkPub = " [0-9]+"
+def get_publication(record):
+    pub_parts = []
+    checkPub = r" [0-9]+"
 
-#     # tokens that appear in most descriptions, but never in publications
-#     removeList = ["above", "\\\\", " \\l.", " 1.", " r.", "(a)"]
+    # tokens that appear in most descriptions, but never in publications
+    removeList = ["above", "\\\\", " \\l.", " 1.", " r.", "(a)"]
+    publication = []
+    # removing first line of entry- never contains publication info
+    if "\n" in record:
+        firstSplit = record.split(sep="\n", maxsplit=1)[1]
+        allPubs = re.split(r"\. \n", firstSplit)[0]
+        if "PLATE" in allPubs:
+            if "\n" in allPubs:
+                allPubs = allPubs.split(sep="PLATE")[1]
+                allPubs = allPubs.split("\n")[1]
 
-#     # removing first line of entry- never contains publication info
-#     if "\n" in record:
-#         firstSplit = record.split(sep="\n", maxsplit=1)[1]
-#         allPubs = re.split("\\. \n", firstSplit)[0]
-#         if "PLATE" in allPubs:
-#             if "\n" in allPubs:
-#                 allPubs = allPubs.split(sep="PLATE")[1]
-#                 allPubs = allPubs.split("\n")[1]
+        # where first line of vase info requires a second line, it always contains a plate as final attribute
+        # removing any second lines that end in PLATE
+        if re.search(checkPub, allPubs):
+            if allPubs[0] != "(":
+                pub_parts = allPubs.split(";")
+                addPub = pub_parts[len(pub_parts) - 1].split(". \n")
+                pub_parts.pop(len(pub_parts) - 1)
+                pub_parts.append(addPub[0])
 
-#         # where first line of vase info requires a second line, it always contains a plate as final attribute
-#         # removing any second lines that end in PLATE
-#         if re.search(checkPub, allPubs):
-#             if allPubs[0] != "(":
-#                 pubs = allPubs.split(";")
-#                 addPub = pubs[len(pubs) - 1].split(". \n")
-#                 pubs.pop(len(pubs) - 1)
-#                 pubs.append(addPub[0])
+                # Removing description lines
+                for p in pub_parts:
+                    removeIndex = []
+                    for r in removeList:
+                        if r in p:
+                            removeIndex.append(
+                                pub_parts.index(p)
+                            )  # record 1/99 has an r. and isn't being removed.
 
-#                 # Removing description lines
-#                 for p in pubs:
-#                     removeIndex = []
-#                     for r in removeList:
-#                         if r in p:
-#                             removeIndex.append(
-#                                 pubs.index(p)
-#                             )  # record 1/99 has an r. and isn't being removed.
+                    removeIndex = list(dict.fromkeys(removeIndex))
+                    if len(removeIndex) > 0:
+                        n = len(pub_parts)
+                        for i in range(0, n - removeIndex[0]):
+                            pub_parts.pop()
+                    while "" in pub_parts:
+                        pub_parts.remove("")
+                publication = [p.replace("\n", "") for p in pub_parts]
+            else:
+                publication = ""
+        else:
+            publication = ""
+    else:
+        publication = ""
 
-#                     removeIndex = list(dict.fromkeys(removeIndex))
-#                     if len(removeIndex) > 0:
-#                         n = len(pubs)
-#                         for i in range(0, n - removeIndex[0]):
-#                             pubs.pop()
-#                     while "" in pubs:
-#                         pubs.remove("")
-#                 publications = [p.replace("\n", "") for p in pubs]
-#             else:
-#                 publications = ""
-#         else:
-#             publications = ""
-#     else:
-#         publications = ""
+    publication = ";".join(publication)
 
-#     # replacing empty array [] in Publications with ""
-#     # for i in range(len(Publications)):
-#     #     if len(Publications[i]) == 0:
-#     #         Publications[i] = ""
+    # replacing empty array [] in Publications with ""
+    # for i in range(len(Publications)):
+    #     if len(Publications[i]) == 0:
+    #         Publications[i] = ""
 
-#     return publications
+    return publication
 
 
 def get_description(record):
@@ -329,7 +350,7 @@ def get_description(record):
     if "(a)" in record:
         description = record.split(sep="(a)", maxsplit=1)[1]
         description = "(a)" + description
-    elif "\n" in record:  # marks end of Publications
+    elif "\n" in record:  # End of publications
         description = record.split(sep="\n", maxsplit=1)[1].strip()
         if re.search(desc_regex, description):
             if ". \n" in description:
@@ -348,38 +369,36 @@ def get_description(record):
     # if not "\n" in description:
     #     if re.search(regPub, description):
     #         description = ""
+    description = description.replace("\n", "").strip()
 
-    return description.replace("\n", "")
+    return description
 
 
 def get_all_attributes(record):
-
     attributes = {
-        "shape": None,
+        "ref_no": get_ref(record),
+        "shape": get_shape(record),
         "curr_coll": get_curr_coll(record) if get_curr_coll(record) else None,
-        "prev_coll": get_prev_coll(record) if get_prev_coll(record) else None,
+        # "prev_coll": get_prev_coll(record) if get_prev_coll(record) else None,
         "provenance": get_provenance(record) if get_provenance(record) else None,
         "height": get_height(record) if get_height(record) else None,
         "diameter": get_diameter(record) if get_diameter(record) else None,
         "plate": get_plate(record) if get_plate(record) else None,
-        # "publication": get_publication(record) if get_publication(record) else None,
-        "description": get_description(record) if get_description(record) else None,
+        "publication": get_publication(record) if get_publication(record) else None,
+        # "description": get_description(record) if get_description(record) else None,
     }
-
     json_record = json.dumps(attributes, indent=4)
 
     return json_record
 
 
-# Testing part, can be removed later
-text = """*129 Malibu 81 AE 78. Ht. 71-4, diam. 60. PLATES 49-51 a 
-Jentoft-Nilsen, 'A Krater by Asteas', in Greek Vases in the J. Paul Getty Museum (Occasional 
-Papers on Antiquities, 1, 1983), pp. 139-48, figs. 1�4; Eva Zahn, Europa und der Stier, p. 122, 
-no. 66. """
-
-json_string = get_all_attributes(text)
-
-# Parse the JSON string into a Python dictionary
-attributes = json.loads(json_string)
-description = attributes["height"]
-print(json_string)
+# Generate a json file for the records
+with open("records.json", "w") as f:
+    f.write("[\n")
+    num_records = len(record_list)
+    for i, record in enumerate(record_list):
+        if not record.startswith("SHAPE"):
+            f.write(get_all_attributes(record))
+            if i < num_records - 1:
+                f.write(",\n")
+    f.write("\n]\n")
