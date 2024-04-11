@@ -33,6 +33,7 @@ def clean_record_list(raw_list):
             raw_list[i] = ""
 
     raw_list = [record for record in raw_list if record != ""]
+
     return raw_list
 
 
@@ -40,8 +41,11 @@ record_list = clean_record_list(record_list)
 
 
 def get_ref(record):
-    ref = record.split(sep=" ", maxsplit=1)[0]
-    ref = ref.replace("*", "").replace("•", "")
+    pattern = r"\b\d+\b"
+
+    # Find the first number
+    ref = re.search(pattern, record)
+    ref = ref.group() if ref else ""
 
     return ref
 
@@ -63,82 +67,105 @@ def get_shape(record):
 
 
 def get_curr_coll(record):
-    locRegex = (
-        r"Broken|broken|Max|max|Actual|actual|Ht.|ht.|Ht|Diam. c.|Diam.|diam.|PLATE"
-    )
-    startLine = "^\\d+"
+    # This is can be added
     break_points = [
-        " Broken",
-        " broken",
-        " Max ",
-        " max ",
-        " Actual ",
-        " actual ",
-        " Ht.",
-        " ht.",
-        " Ht",
-        " Diam. c.",
-        " Diam",
-        " diam",
-        " PLATE",
+        "Once",
+        "once",
+        "from",
+        "ex",
+        "Gift",
+        "Fragmentary",
+        "Broken",
+        "broken",
+        "Max ",
+        "max ",
+        "Actual",
+        "actual",
+        "Ht",
+        "ht.",
+        "Diam",
+        "diam",
+        "PLATE",
+        "\n",
     ]
-    locationOnwards = record.split(sep=" ", maxsplit=1)[1].strip()
 
-    # removing vase number from entry. Location, if exists, is next attribute.
-    if re.search(startLine, locationOnwards):
-        locationOnwards = locationOnwards.split(sep=" ", maxsplit=1)[1].strip()
-    if any(point in record for point in break_points):
-        curr_coll = re.split(locRegex, locationOnwards)[0]
-    else:
-        curr_coll = locationOnwards.split(sep="\n", maxsplit=1)[0].strip()
+    curr_coll = ""
+    if "\n" in record:
+        # Remove '*\d+'
+        curr_coll = record.split(sep=" ", maxsplit=1)[1].strip()
+        # Some records have format '* \d+'. Remove number after *
+        if re.search(r"^\d+", curr_coll):
+            curr_coll = curr_coll.split(sep=" ", maxsplit=1)[1].strip()
 
-    # removing 'from' in Location
-    if " from " in curr_coll:
-        curr_coll = curr_coll.split(sep=" from ", maxsplit=1)[0]
+        # Keep the first line only
+        curr_coll = curr_coll.split(sep="\n", maxsplit=1)[0].strip()
 
-    curr_coll = curr_coll.replace("\n", "").rstrip("., ")
+        for point in break_points:
+            index = curr_coll.find(point)
+            if index != -1:
+                curr_coll = curr_coll[:index].strip()
+                break
+
+    curr_coll = curr_coll.rstrip(".,( ")
 
     return curr_coll
 
 
-def get_prev_coll(location):
-    regPrev = r"\(ex |, ex |; ex "
+# print(get_curr_coll("""673a Lekanis 21616, from C. Andriuolo (1969), T. 61. """))
+
+
+def get_prev_coll(record):
+    prev_regex = r"Once |once |\(ex |, ex |; ex "
+
+    # This is can be added
     break_points = [
-        ")",
-        " Ht.",
-        " Diam.",
-        " PLATE",
+        "Once",
+        "once",
+        "from",
+        "ex",
+        "Gift",
+        "Fragmentary",
+        "Broken",
+        "broken",
+        "Max ",
+        "max ",
+        "Actual",
+        "actual",
+        "Ht",
+        "ht.",
+        "Diam",
+        "diam",
+        "PLATE",
         "\n",
     ]
-    if location.startswith("(a)"):
-        location = ""
 
-    # If current location is unknown and previous location is known, location starts with 'Once '
-    if location.startswith("Once "):
-        prev = location
-        location = ""
-        prev = prev.replace("Once ", "")
+    # Remove '*\d+'
+    prev_coll = record.split(sep=" ", maxsplit=1)[1].strip()
+    # Some records have format '* \d+'. Remove number after *
+    if re.search(r"^\d+", prev_coll):
+        prev_coll = prev_coll.split(sep=" ", maxsplit=1)[1].strip()
 
-    # If current location known and previous location known, location contains 'ex '.
-    elif "ex " in location:
-        prev = re.split(regPrev, location)[1].strip()
-        location = re.split(regPrev, location)[0].strip()
+    # Keep the first 2 lines only
+    prev_coll = prev_coll.split("\n")[:2]
+    prev_coll = "".join(prev_coll)
+
+    if re.search(prev_regex, prev_coll):
+        prev_coll = re.split(prev_regex, prev_coll)[1].strip()
     else:
-        prev = ""
+        prev_coll = ""
 
-    if not "(" in prev:
-        prev = prev.replace(").", "").replace("\n", "").rstrip("., ")
+    for point in break_points:
+        index = prev_coll.find(point)
+        if index != -1:
+            prev_coll = prev_coll[:index].strip()
+            break
 
-    return prev
+    prev_coll = prev_coll.rstrip(".,) ")
+
+    return prev_coll
 
 
 def get_provenance(record):
-    # Provenance starts after "from"
-    pattern_index = record.find("from")
-    if pattern_index == -1:
-        return ""
-    provenance = record[pattern_index + len("from") :].strip()
-
     # This list can be added
     break_points = [
         "Rim",
@@ -169,13 +196,25 @@ def get_provenance(record):
         "In",
         "Very",
     ]
+
+    # Keep the first line only
+    provenance = record.split(sep="\n", maxsplit=1)[0].strip()
+
+    # Provenance starts after "from"
+    pattern_index = provenance.find("from")
+    if pattern_index == -1:
+        return ""
+    provenance = provenance[pattern_index + len("from") :].strip()
+
     for point in break_points:
         index = provenance.find(point)
         if index != -1:
             provenance = provenance[:index].strip()
             break
 
-    return provenance.rstrip("., ")
+    provenance = provenance.rstrip("., ")
+
+    return provenance
 
 
 def get_height(record):
@@ -225,7 +264,7 @@ def get_diameter(record):
 
 
 def get_plate(record):
-    # Plate starts after "PLATE/PLATES"
+    # Plate starts after "PLATE/PLATES/PLATED"
     plate_regex = r"PLATE|PLATES|PLATED"
     break_points = ["PLATE"]
     if any(point in record for point in break_points):
@@ -236,7 +275,87 @@ def get_plate(record):
         return ""
 
 
-# Converting Plate into number format for database image reference
+def get_publication(record):
+    # This list can be added
+    break_points = [
+        "Rim",
+        "Only",
+        "Badly",
+        "Neck",
+        "Foot",
+        "Top",
+        "Broken",
+        "broken",
+        "Max",
+        "max",
+        "Actual",
+        "actual",
+        "Original",
+        "Part",
+        "Ht.",
+        "ht.",
+        "Ht",
+        "Fragment",
+        "fragment",
+        "Diam",
+        "diam",
+        "PLATE",
+    ]
+
+    pub_regex = r"Ex |PP|LCS|PAdd|pp. |pi. \d+|p. \d+|GRFP|IIIC"
+    description = get_description(record)
+
+    if "\n" in record:
+        pub_lines = []
+        publication = ""
+        record_lines = record.split("\n")
+        for line in record_lines:
+            if (
+                re.search(pub_regex, line)
+                and not line in description
+                and not any(point in line for point in break_points)
+            ):
+                pub_lines.append(line)
+        publication = "".join(pub_lines).strip()
+
+    else:
+        publication = ""
+
+    return publication
+
+
+def get_description(record):
+    pub_regex = r"Ex |PP|LCS|PAdd|pp. |pi. \d+|p. \d+|GRFP|IIIC"
+    break_regex = r"Ht|ht.|Diam|diam|PLATE"
+
+    if "(a)" in record:
+        description = record.split(sep="(a)", maxsplit=1)[1]
+        description = "(a)" + description
+    elif "\n" in record:
+        # Skip first line
+        description = record.split(sep="\n", maxsplit=1)[1].strip()
+        if "\n" in description and re.search(break_regex, description):
+            description = description.split(sep="\n", maxsplit=1)[1]
+
+        if re.search(pub_regex, description):
+            if ". \n" in description:
+                description = description.split(sep=". \n", maxsplit=1)[1].strip()
+            elif " \n" in description:
+                description = description.split(sep=" \n", maxsplit=1)[1].strip()
+
+    else:
+        description = ""
+
+    # Remove publications not being caught
+    if "\n" in description and re.search(pub_regex, description):
+        description = description.split(sep="\n", maxsplit=1)[1]
+
+    description = description.replace("\n", "").strip()
+
+    return description
+
+
+# TODO: Match record with image based on reference number
 def match_plate(Plate, referenceNo, imagePlate, refImage):
     NewPlate = []
     Text = ""
@@ -284,108 +403,18 @@ def match_plate(Plate, referenceNo, imagePlate, refImage):
         refImage.remove("")
 
 
-def get_publication(record):
-    pub_parts = []
-    checkPub = r" [0-9]+"
-
-    # tokens that appear in most descriptions, but never in publications
-    removeList = ["above", "\\\\", " \\l.", " 1.", " r.", "(a)"]
-    publication = []
-    # removing first line of entry- never contains publication info
-    if "\n" in record:
-        firstSplit = record.split(sep="\n", maxsplit=1)[1]
-        allPubs = re.split(r"\. \n", firstSplit)[0]
-        if "PLATE" in allPubs:
-            if "\n" in allPubs:
-                allPubs = allPubs.split(sep="PLATE")[1]
-                allPubs = allPubs.split("\n")[1]
-
-        # where first line of vase info requires a second line, it always contains a plate as final attribute
-        # removing any second lines that end in PLATE
-        if re.search(checkPub, allPubs):
-            if allPubs[0] != "(":
-                pub_parts = allPubs.split(";")
-                addPub = pub_parts[len(pub_parts) - 1].split(". \n")
-                pub_parts.pop(len(pub_parts) - 1)
-                pub_parts.append(addPub[0])
-
-                # Removing description lines
-                for p in pub_parts:
-                    removeIndex = []
-                    for r in removeList:
-                        if r in p:
-                            removeIndex.append(
-                                pub_parts.index(p)
-                            )  # record 1/99 has an r. and isn't being removed.
-
-                    removeIndex = list(dict.fromkeys(removeIndex))
-                    if len(removeIndex) > 0:
-                        n = len(pub_parts)
-                        for i in range(0, n - removeIndex[0]):
-                            pub_parts.pop()
-                    while "" in pub_parts:
-                        pub_parts.remove("")
-                publication = [p.replace("\n", "") for p in pub_parts]
-            else:
-                publication = ""
-        else:
-            publication = ""
-    else:
-        publication = ""
-
-    publication = ";".join(publication)
-
-    # replacing empty array [] in Publications with ""
-    # for i in range(len(Publications)):
-    #     if len(Publications[i]) == 0:
-    #         Publications[i] = ""
-
-    return publication
-
-
-def get_description(record):
-    desc_regex = r"PP|PAdd|PPSupp|pp. | pi. \d+| p. \d+"
-    regpoint = r"Ht.|ht.|Ht|Diam. c.|Diam|diam|PLATES|PLATE"
-
-    if "(a)" in record:
-        description = record.split(sep="(a)", maxsplit=1)[1]
-        description = "(a)" + description
-    elif "\n" in record:  # End of publications
-        description = record.split(sep="\n", maxsplit=1)[1].strip()
-        if re.search(desc_regex, description):
-            if ". \n" in description:
-                description = description.split(sep=". \n", maxsplit=1)[1].strip()
-                if re.search(desc_regex, description):
-                    description = description.split(sep=". \n", maxsplit=1)[1].strip()
-        if re.search(regpoint, description):
-            if "\n" in description:
-                description = description.split(sep="\n", maxsplit=1)[1]
-    else:
-        description = ""
-
-    # Removing Publications not being caught
-    # regPub = r"PAdd|PP"
-
-    # if not "\n" in description:
-    #     if re.search(regPub, description):
-    #         description = ""
-    description = description.replace("\n", "").strip()
-
-    return description
-
-
 def get_all_attributes(record):
     attributes = {
-        "ref_no": get_ref(record),
-        "shape": get_shape(record),
+        "ref_no": get_ref(record),  # Every record has a reference number
+        "shape": get_shape(record),  # Every record belongs to a shape type
         "curr_coll": get_curr_coll(record) if get_curr_coll(record) else None,
-        # "prev_coll": get_prev_coll(record) if get_prev_coll(record) else None,
+        "prev_coll": get_prev_coll(record) if get_prev_coll(record) else None,
         "provenance": get_provenance(record) if get_provenance(record) else None,
         "height": get_height(record) if get_height(record) else None,
         "diameter": get_diameter(record) if get_diameter(record) else None,
         "plate": get_plate(record) if get_plate(record) else None,
         "publication": get_publication(record) if get_publication(record) else None,
-        # "description": get_description(record) if get_description(record) else None,
+        "description": get_description(record) if get_description(record) else None,
     }
     json_record = json.dumps(attributes, indent=4)
 
@@ -395,10 +424,9 @@ def get_all_attributes(record):
 # Generate a json file for the records
 with open("records.json", "w") as f:
     f.write("[\n")
-    num_records = len(record_list)
     for i, record in enumerate(record_list):
         if not record.startswith("SHAPE"):
             f.write(get_all_attributes(record))
-            if i < num_records - 1:
+            if i < len(record_list) - 1:
                 f.write(",\n")
     f.write("\n]\n")
