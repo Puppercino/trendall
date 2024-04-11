@@ -111,9 +111,6 @@ def get_curr_coll(record):
     return curr_coll
 
 
-# print(get_curr_coll("""673a Lekanis 21616, from C. Andriuolo (1969), T. 61. """))
-
-
 def get_prev_coll(record):
     prev_regex = r"Once |once |\(ex |, ex |; ex "
 
