@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
-const vaseRoutes = require('./routes/vase_route');
+const recordRoutes = require('./routes/record_route');
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/vases', vaseRoutes);
+app.use('/records', recordRoutes);
 
 // Connect to db
 mongoose
