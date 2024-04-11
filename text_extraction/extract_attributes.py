@@ -312,7 +312,7 @@ def get_publication(record):
         for line in record_lines:
             if (
                 re.search(pub_regex, line)
-                and not line in description
+                and not line.strip() in description
                 and not any(point in line for point in break_points)
             ):
                 pub_lines.append(line)
@@ -343,13 +343,12 @@ def get_description(record):
             elif " \n" in description:
                 description = description.split(sep=" \n", maxsplit=1)[1].strip()
 
+        # Remove publications not being caught
+        if "\n" in description and re.search(pub_regex, description):
+            description = description.split(sep="\n", maxsplit=1)[1]
+
     else:
         description = ""
-
-    # Remove publications not being caught
-    if "\n" in description and re.search(pub_regex, description):
-        description = description.split(sep="\n", maxsplit=1)[1]
-
     description = description.replace("\n", "").strip()
 
     return description
