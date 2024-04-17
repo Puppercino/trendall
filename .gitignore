@@ -1,2 +1,4 @@
 /text_extraction/*.pdf
 /text_extraction/test.txt
+/node_modules/
+/.next/
