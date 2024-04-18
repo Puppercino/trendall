@@ -7,7 +7,7 @@ from pathlib import Path
 
 # GLOBALS
 # Set compression quality.
-JPG_QUALITY = 75
+JPG_QUALITY = 50
 
 TIF_PATH = "./TIF/"  # Where the TIFs are.
 JPG_PATH = "./JPG/"  # Where you want the JPGs saved.
@@ -27,7 +27,7 @@ def generate_thumbnail(tif_file):
     # Retain filename for JPG output.
     jpg_out = JPG_PATH + Path(os.path.basename(tif_file)).stem + ".jpeg"
 
-    # Correct the color mode if it isn't
+    # Correct the color mode if it isn't RGB
     if tif.mode != "RGB":
         tif = tif.convert("RGB")
 
