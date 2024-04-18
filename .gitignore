@@ -2,3 +2,4 @@
 /text_extraction/test.txt
 /node_modules/
 /.next/
+.env
