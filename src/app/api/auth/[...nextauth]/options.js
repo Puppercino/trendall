@@ -1,4 +1,3 @@
-import { NextAuthOptions } from "next-auth";
 import CognitoProvider from "next-auth/providers/cognito";
 
 // Plug Amazon Cognito into NextAuth.
