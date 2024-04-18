@@ -1,5 +1,5 @@
 ## Getting Started
-Before starting, make sure you have [Node.js](https://nodejs.org/en/) installed on your machine.
+Before starting, make sure you have [Node.js 20 LTS or later](https://nodejs.org/en/) installed on your machine.
 
 First, install dependencies by running this npm command in the root directory of the project:
 
