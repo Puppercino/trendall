@@ -44,6 +44,6 @@ const recordSchema = mongoose.Schema({
     },
 }, { timestamps: true });
 
-const recordModel = mongoose.model("Record", recordSchema);
+const Record = mongoose.model("Record", recordSchema);
 
-export { recordModel as recordModel };
+export default Record;
