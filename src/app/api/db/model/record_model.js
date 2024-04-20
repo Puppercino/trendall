@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
+import mongoose, {Schema} from 'mongoose';
 
 // Record Schema for MongoDB, originally written by Vinh in Express.
-const recordSchema = mongoose.Schema({
+const recordSchema = new Schema({
     ref_no: {
         type: Number,
         required: true
@@ -44,6 +44,14 @@ const recordSchema = mongoose.Schema({
     },
 }, { timestamps: true });
 
-const Record = mongoose.model("Record", recordSchema);
+let Record;
+
+try {
+    // Trying to get the existing model to avoid overwriting
+    Record = mongoose.model('Record');
+} catch {
+    // Model doesn't exist, make a new one
+    Record = mongoose.model('Record', recordSchema);
+}
 
 export default Record;
