@@ -1,9 +1,7 @@
-import { Inter, Fira_Sans } from "next/font/google";
+import { Fira_Sans } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
 import {Navbar} from "@/app/components/Navbar";
 
-const inter = Inter({ subsets: ["latin"] });
 const firaSans = Fira_Sans({ style: "normal", weight: "400", subsets: ["latin"] });
 
 export const metadata = {

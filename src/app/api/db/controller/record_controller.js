@@ -5,7 +5,7 @@ import Record from "@/app/api/db/model/record_model";
 const getAllRecords = async (req, res) => {
     const records = await Record.find({}).sort({ createdAt: -1 });
 
-    res.status(200).json(records);
+    return records;
 }
 
 // GET one
