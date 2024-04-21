@@ -9,7 +9,7 @@ export function Navbar() {
             </div>
             <div className="flex justify-center gap-5 p-5">
                 <NavLink href="/">Home</NavLink>
-                <NavLink href="/search">Search</NavLink>
+                <NavLink href="/search">Browse</NavLink>
                 <NavLink href="/user">Account</NavLink>
             </div>
         </nav>
