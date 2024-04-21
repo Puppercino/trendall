@@ -1,6 +1,6 @@
 export default function UserLayout({ children }) {
     return (
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-0">
             {children}
         </div>
     );
