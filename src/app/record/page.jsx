@@ -1,5 +1,5 @@
-import {getAllRecords} from "@/app/api/db/controller/record_controller";
-import {RecordItem} from "@/app/components/RecordItem";
+import { getAllRecords } from "@/app/api/db/controller/record_controller";
+import { RecordItem } from "@/app/components/RecordItem";
 
 export default async function AllRecordsPage() {
 
@@ -8,7 +8,9 @@ export default async function AllRecordsPage() {
     return (
         <ul>
             <h1>All Records</h1>
-                {records.map(record =>
+            {records.map(recordDoc => {
+                const record = JSON.parse(JSON.stringify(recordDoc));
+                return (
                     <li key={record._id} className="flex flex-col flex-wrap">
                         <RecordItem
                             id={record._id}
@@ -24,7 +26,9 @@ export default async function AllRecordsPage() {
                             description={record.description}
                         />
                     </li>
-                )}
+                );
+            }
+            )}
 
         </ul>
     )
