@@ -1,6 +1,6 @@
 import { Fira_Sans } from "next/font/google";
 import "./globals.css";
-import {Navbar} from "@/app/components/Navbar";
+import { Navbar } from "@/app/components/Navbar";
 
 const firaSans = Fira_Sans({ style: "normal", weight: "400", subsets: ["latin"] });
 
@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
       <body className="bg-stone-50">
         <Navbar></Navbar>
         <div className="m-4">
-            {children}
+          {children}
         </div>
       </body>
     </html>

@@ -1,5 +1,5 @@
 "use client";
-import {NavLink} from "@/app/components/NavLink";
+import { NavLink } from "@/app/components/NavLink";
 
 export function Navbar() {
     return (
