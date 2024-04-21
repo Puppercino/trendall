@@ -1,4 +1,6 @@
 import mongoose, {Schema} from 'mongoose';
+import dbConnection from "@/app/api/db/db";
+
 
 // Record Schema for MongoDB, originally written by Vinh in Express.
 const recordSchema = new Schema({
@@ -44,14 +46,18 @@ const recordSchema = new Schema({
     },
 }, { timestamps: true });
 
-let Record;
+function initRecord() {
+    try {
+        // Trying to get the existing model to avoid overwriting
+        return mongoose.model('Record');
+    } catch {
+        // Model doesn't exist, make a new one
+        return mongoose.model('Record', recordSchema, 'records');
+    }
 
-try {
-    // Trying to get the existing model to avoid overwriting
-    Record = mongoose.model('Record');
-} catch {
-    // Model doesn't exist, make a new one
-    Record = mongoose.model('Record', recordSchema);
 }
+
+let Record = initRecord();
+dbConnection().then(() => initRecord());
 
 export default Record;
