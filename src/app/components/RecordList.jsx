@@ -4,7 +4,7 @@ import { HiPencilAlt } from "react-icons/hi";
 
 const getRecords = async () => {
     try {
-        const res = await fetch(process.env.API_BASE_URL, {
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
             cache: 'no-store',
         });
 
@@ -33,10 +33,10 @@ export default async function RecordList() {
                     </div>
 
                     <div> {/* Only admin can edit or remove records? */}
-                        {/* <RemoveBtn id={record._id} />
+                        <RemoveBtn id={record._id} />
                         <Link href={`/edit_record/${record._id}`}>
                             <HiPencilAlt size={24} />
-                        </Link> */}
+                        </Link>
                     </div>
 
                 </div>

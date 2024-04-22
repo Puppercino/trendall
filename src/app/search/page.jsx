@@ -59,10 +59,10 @@ export default function SearchPage() {
 
                 {/* Result container */}
                 <div className="lg:ml-4 w-full lg:w-2/3">
-                    {/* <Link className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    <Link className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         href={'/add_record'}>
                         Temporary add record button, might delete later
-                    </Link> */}
+                    </Link>
                     {/* Result list */}
                     {/* <div className="pt-2 space-y-4">
                         <div className="border-b-2 pb-4">

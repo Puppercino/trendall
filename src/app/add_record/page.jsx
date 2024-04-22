@@ -18,7 +18,7 @@ export default function AddRecord() {
         }
 
         try {
-            const res = await fetch(process.env.API_BASE_URL, {
+            const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
