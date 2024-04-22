@@ -15,11 +15,11 @@ export default function RemoveBtn({ id }) {
                 method: 'DELETE',
             });
 
-            if (res.ok) {
-                router.refresh();
-            } else {
+            if (!res.ok) {
                 throw new Error('Failed to delete record');
             }
+
+            router.refresh();
         }
     };
 

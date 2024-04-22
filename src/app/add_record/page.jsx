@@ -18,7 +18,7 @@ export default function AddRecord() {
         }
 
         try {
-            const res = await fetch('http://localhost:3000/api/db/routes', {
+            const res = await fetch(process.env.API_BASE_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -30,7 +30,7 @@ export default function AddRecord() {
                 throw new Error('Failed to create record');
             }
 
-            router.push('/'); // Navigate to home screen
+            router.push('/search'); // Navigate to search screen
             router.refresh();
 
         } catch (error) {
