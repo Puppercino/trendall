@@ -1,28 +1,34 @@
 import Image from "next/image";
 
 export function RecordItem(props) {
-    let prev_coll = '';
-
-    if (props.prev_coll) {
-        prev_coll = ', Previously in ' + props.prev_coll;
-    }
+    let curr_coll = props.curr_coll ? props.curr_coll : 'N/A';
+    let prev_coll = props.prev_coll ? props.prev_coll : 'N/A';
 
     return (
         <div className="my-2 flex flex-row gap-x-2 rounded border border-stone-200">
             <Image className={"rounded-l"} src={"/vase_placeholder.png"} alt={"Vase image"} height={100} width={100}></Image>
-            <div className={"py-2"}>
-                <p className="font-mono text-sm opacity-50">
-                    {props.id}
-                </p>
+            <div className={"py-2"} style={{ minWidth: '0' }}>
+
                 <p className="text-lg">
-                    Ref: <b>{props.ref_no}</b>
+                    Shape: <b>{props.shape}</b>
                 </p>
-                <p>
-                    {props.shape}, Height: {props.height}, Diameter: {props.diameter}
+
+                <p style={{
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                }}>
+                    Current collection: <b>{curr_coll}</b>
                 </p>
-                <p>
-                    Collection: <b>{props.curr_coll}</b>{prev_coll}
+
+                <p style={{
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                }}>
+                    Previously in: <b>{prev_coll}</b>
                 </p>
+
             </div>
         </div>
     )
