@@ -1,3 +1,5 @@
+// Might delete the whole file and controller folder later
+
 import mongoose from "mongoose";
 import Record from "@/app/api/db/model/record_model";
 

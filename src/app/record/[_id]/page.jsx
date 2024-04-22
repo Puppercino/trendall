@@ -8,7 +8,7 @@ export default async function RecordPage({ params }) {
     return (
         <div>
             <h1>Record Reference {params._id}</h1>
-            {/* <RecordItem
+            <RecordItem
                 id={params._id}
                 ref_no={params.ref_no}
                 shape={params.shape}
@@ -20,7 +20,7 @@ export default async function RecordPage({ params }) {
                 plate={params.plate}
                 publication={params.publication}
                 description={params.description}
-            /> */}
+            />
         </div>
     );
 }

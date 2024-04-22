@@ -15,7 +15,7 @@ JPG_PATH = "./JPG/"  # Where you want the JPGs saved.
 
 
 def get_tifs(directory):
-    return glob.glob(f'{directory}/*.tif')
+    return glob.glob(f"{directory}/*.tif")
 
 
 # aspect_crop: crops the image to a square for thumbnail.
@@ -74,4 +74,3 @@ if __name__ == "__main__":
     queue = get_tifs(TIF_PATH)
     for original in queue:
         generate_thumbnail(original)
-
