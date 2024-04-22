@@ -13,7 +13,7 @@ export default function EditRecordForm({ id, ref_no, shape }) {
         e.preventDefault();
 
         try {
-            const res = await fetch(`http://localhost:3000/api/db/routes/${id}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -25,7 +25,7 @@ export default function EditRecordForm({ id, ref_no, shape }) {
                 throw new Error('Failed to update record');
             }
 
-            router.push('/'); // Navigate to home screen
+            router.push('/search'); // Navigate to home screen
             router.refresh();
 
         } catch (error) {
