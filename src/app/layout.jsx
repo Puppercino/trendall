@@ -12,7 +12,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={firaSans.className}>
+    <html lang="en" className={firaSans.className + " h-full"}>
       <body className="bg-stone-50">
         <Navbar></Navbar>
         <div className="m-4">
