@@ -26,9 +26,9 @@ export default async function RecordList() {
     return (
         <>
             {records.map(record => (
-                <div className="p-4 border border-slate-300 my-3 flex justify-between gap-5 items-start">
+                <div key={record._id} className="my-3 flex items-start justify-between gap-5 border border-slate-300 p-4">
                     <div >
-                        <h2 className="font-bold text-2xl">{record.ref_no}</h2>
+                        <h2 className="text-2xl font-bold">{record.ref_no}</h2>
                         <div>{record.shape}</div>
                     </div>
 
