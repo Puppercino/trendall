@@ -1,8 +1,10 @@
+"use client";
 import Link from "next/link";
 import RemoveBtn from "@/app/components/RemoveBtn";
 import { RecordItem } from "@/app/components/RecordItemSearchPage";
 import { HiPencilAlt } from "react-icons/hi";
 
+/*
 const getRecords = async () => {
     try {
         const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
@@ -19,10 +21,10 @@ const getRecords = async () => {
         console.error(error)
     }
 };
+*/
 
-export default async function RecordListSearchPage() {
+export default function RecordListSearchPage({records}) {
 
-    const { records } = await getRecords();
     const slicedRecords = records.slice(0, 20); // Change limit here
 
     return (
