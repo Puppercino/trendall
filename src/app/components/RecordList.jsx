@@ -1,5 +1,6 @@
 import Link from "next/link";
 import RemoveBtn from "@/app/components/RemoveBtn";
+import { RecordItem } from "@/app/components/RecordItem";
 import { HiPencilAlt } from "react-icons/hi";
 
 const getRecords = async () => {
@@ -19,28 +20,40 @@ const getRecords = async () => {
     }
 };
 
-export default async function RecordList() {
+export default async function RecordListSearchPage() {
 
     const { records } = await getRecords();
+    const slicedRecords = records.slice(0, 20);
 
     return (
-        <>
-            {records.map(record => (
-                <div key={record._id} className="my-3 flex items-start justify-between gap-5 border border-slate-300 p-4">
-                    <div >
-                        <h2 className="text-2xl font-bold">{record.ref_no}</h2>
-                        <div>{record.shape}</div>
-                    </div>
+        <ul>
+            {slicedRecords.map(record => (
+                <li key={record._id} className="flex flex-col flex-wrap">
 
-                    <div> {/* Only admin can edit or remove records? */}
+                    <RecordItem
+                        id={record._id}
+                        ref_no={record.ref_no}
+                        shape={record.shape}
+                        curr_coll={record.curr_coll}
+                        prev_coll={record.prev_coll}
+                        provenance={record.provenance}
+                        height={record.height}
+                        diameter={record.diameter}
+                        plate={record.plate}
+                        publication={record.publication}
+                        description={record.description}
+                    />
+
+                    {/* Include 2 buttons in record list in edit database page */}
+                    {/* <div>
                         <RemoveBtn id={record._id} />
                         <Link href={`/edit_record/${record._id}`}>
                             <HiPencilAlt size={24} />
                         </Link>
-                    </div>
+                    </div> */}
 
-                </div>
+                </li>
             ))}
-        </>
+        </ul>
     )
 }

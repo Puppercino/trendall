@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react';
-import RecordList from "@/app/components/RecordList";
+import RecordListSearchPage from "@/app/components/RecordList";
 import { FiSearch } from "react-icons/fi";
 import Link from "next/link";
 
@@ -41,7 +41,7 @@ export default function SearchPage() {
                         <input
                             className="p-2 flex-1"
                             type="text"
-                            placeholder="Search text"
+                            placeholder="Search records..."
                         />
                         <button className="bg-gray-200 p-2">
                             <FiSearch size={24} />
@@ -59,27 +59,30 @@ export default function SearchPage() {
 
                 {/* Result container */}
                 <div className="lg:ml-4 w-full lg:w-2/3">
-                    <Link className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    {/* <Link className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         href={'/add_record'}>
                         Temporary add record button, might delete later
-                    </Link>
-                    {/* Result list */}
-                    {/* <div className="pt-2 space-y-4">
-                        <div className="border-b-2 pb-4">
-                            <p className="font-bold">Result 1</p>
-                            <p>Introduction</p>
-                        </div>
+                    </Link> */}
+                    <div className="flex justify-start">
+                        <button className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-fit"
+                            type="button">
+                            Show all records
+                        </button>
+                    </div>
 
-                        <div className="border-b-2 pb-4">
-                            <p className="font-bold">Result 2</p>
-                            <p>Introduction</p>
-                        </div>
-                    </div> */}
-                    <RecordList />
+                    <RecordListSearchPage />
                 </div>
 
             </div>
 
+            <div className="flex justify-end">
+                <button className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-fit"
+                    type="button">
+                    Show all records
+                </button>
+            </div>
+
         </div>
+
     );
 }
