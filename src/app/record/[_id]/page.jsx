@@ -1,9 +1,6 @@
-import { getOneRecord } from "@/app/api/db/controller/record_controller";
-import { RecordItem } from "@/app/components/RecordItem";
+import { RecordItem } from "@/app/components/RecordItemSearchPage";
 
 export default async function RecordPage({ params }) {
-
-    // const record = await getOneRecord(params._id);
 
     return (
         <div>

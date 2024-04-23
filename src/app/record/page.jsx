@@ -1,5 +1,5 @@
 import { getAllRecords } from "@/app/api/db/controller/record_controller";
-import { RecordItem } from "@/app/components/RecordItem";
+import { RecordItem } from "@/app/components/RecordItemSearchPage";
 import Link from "next/link";
 
 export default async function AllRecordsPage() {

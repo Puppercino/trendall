@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
-import RecordListSearchPage from "@/app/components/RecordList";
+import RecordListSearchPage from "@/app/components/RecordListSearchPage";
 import { FiSearch } from "react-icons/fi";
 import Link from "next/link";
 
 // Attribute
-const Attribute = ({ number }) => {
+const Attribute = ({ name }) => {
     const [isEditing, setIsEditing] = useState(false);
 
     return (
         <div className="flex flex-col">
             <button
                 onClick={() => setIsEditing(!isEditing)}
-                className="mb-2 rounded border-2 p-2 text-left">
-                Attribute {number}
+                className="border-2 p-2 rounded mb-2 text-left">
+                {name}
             </button>
             {isEditing && (
                 <input
                     type="text"
-                    placeholder={`Enter Attribute ${number}`}
-                    className="mb-2 rounded border-2 p-2"
+                    placeholder={`Enter Attribute ${name}`}
+                    className="border-2 p-2 rounded mb-2"
                     onBlur={() => setIsEditing(false)} />
             )}
         </div>
@@ -39,7 +39,7 @@ export default function SearchPage() {
                         <input
                             className="flex-1 p-2"
                             type="text"
-                            placeholder="Search records..."
+                            placeholder="General search term..."
                         />
                         <button className="bg-gray-200 p-2">
                             <FiSearch size={24} />
@@ -48,8 +48,8 @@ export default function SearchPage() {
 
                     {/* Attribute Box */}
                     <div className="flex flex-col gap-4">
-                        {Array.from({ length: 6 }).map((_, i) => (
-                            <Attribute key={i} number={i + 1} />
+                        {["Shape", "Collection", "Provenance", "With images"].map((item, i) => (
+                            <Attribute key={i} name={item} />
                         ))}
                     </div>
 
@@ -62,10 +62,10 @@ export default function SearchPage() {
                         Temporary add record button, might delete later
                     </Link> */}
                     <div className="flex justify-start">
-                        <button className="w-fit rounded bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-600"
-                            type="button">
+                        <Link className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-fit"
+                            href={'/record'}>
                             Show all records
-                        </button>
+                        </Link>
                     </div>
 
                     <RecordListSearchPage />
@@ -74,10 +74,10 @@ export default function SearchPage() {
             </div>
 
             <div className="flex justify-end">
-                <button className="w-fit rounded bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-600"
-                    type="button">
+                <Link className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-fit"
+                    href={'/record'}>
                     Show all records
-                </button>
+                </Link>
             </div>
 
         </div>
