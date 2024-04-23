@@ -1,12 +1,12 @@
 "use client"
 
 import React, { useState } from 'react';
-import RecordListSearchPage from "@/app/components/RecordList";
+import RecordListSearchPage from "@/app/components/RecordListSearchPage";
 import { FiSearch } from "react-icons/fi";
 import Link from "next/link";
 
 // Attribute
-const Attribute = ({ number }) => {
+const Attribute = ({ name }) => {
     const [isEditing, setIsEditing] = useState(false);
 
     return (
@@ -14,12 +14,12 @@ const Attribute = ({ number }) => {
             <button
                 onClick={() => setIsEditing(!isEditing)}
                 className="border-2 p-2 rounded mb-2 text-left">
-                Attribute {number}
+                {name}
             </button>
             {isEditing && (
                 <input
                     type="text"
-                    placeholder={`Enter Attribute ${number}`}
+                    placeholder={`Enter Attribute ${name}`}
                     className="border-2 p-2 rounded mb-2"
                     onBlur={() => setIsEditing(false)} />
             )}
@@ -41,7 +41,7 @@ export default function SearchPage() {
                         <input
                             className="p-2 flex-1"
                             type="text"
-                            placeholder="Search records..."
+                            placeholder="General search term..."
                         />
                         <button className="bg-gray-200 p-2">
                             <FiSearch size={24} />
@@ -50,8 +50,8 @@ export default function SearchPage() {
 
                     {/* Attribute Box */}
                     <div className="flex flex-col gap-4">
-                        {Array.from({ length: 6 }).map((_, i) => (
-                            <Attribute key={i} number={i + 1} />
+                        {["Shape", "Collection", "Provenance", "With images"].map((item, i) => (
+                            <Attribute key={i} name={item} />
                         ))}
                     </div>
 
@@ -64,10 +64,10 @@ export default function SearchPage() {
                         Temporary add record button, might delete later
                     </Link> */}
                     <div className="flex justify-start">
-                        <button className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-fit"
-                            type="button">
+                        <Link className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-fit"
+                            href={'/record'}>
                             Show all records
-                        </button>
+                        </Link>
                     </div>
 
                     <RecordListSearchPage />
@@ -76,10 +76,10 @@ export default function SearchPage() {
             </div>
 
             <div className="flex justify-end">
-                <button className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-fit"
-                    type="button">
+                <Link className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-fit"
+                    href={'/record'}>
                     Show all records
-                </button>
+                </Link>
             </div>
 
         </div>

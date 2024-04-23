@@ -2,7 +2,7 @@ import EditRecordForm from "@/app/components/EditRecordForm"
 
 const getRecordById = async (id) => {
     try {
-        const res = await fetch(`http://localhost:3000/api/db/routes/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${id}`, {
             cache: 'no-store',
         });
 

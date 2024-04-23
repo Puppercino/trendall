@@ -1,6 +1,6 @@
 import Link from "next/link";
 import RemoveBtn from "@/app/components/RemoveBtn";
-import { RecordItem } from "@/app/components/RecordItem";
+import { RecordItem } from "@/app/components/RecordItemSearchPage";
 import { HiPencilAlt } from "react-icons/hi";
 
 const getRecords = async () => {
@@ -23,7 +23,7 @@ const getRecords = async () => {
 export default async function RecordListSearchPage() {
 
     const { records } = await getRecords();
-    const slicedRecords = records.slice(0, 20);
+    const slicedRecords = records.slice(0, 20); // Change limit here
 
     return (
         <ul>
