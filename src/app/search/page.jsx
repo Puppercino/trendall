@@ -1,5 +1,3 @@
-"use client"
-
 import React, { useState } from 'react';
 import RecordListSearchPage from "@/app/components/RecordListSearchPage";
 import { FiSearch } from "react-icons/fi";
@@ -31,15 +29,15 @@ export default function SearchPage() {
     return (
         <div className="container mx-auto p-4">
 
-            <div className="flex flex-col lg:flex-row lg:justify-between gap-4">
+            <div className="flex flex-col gap-4 lg:flex-row lg:justify-between">
 
                 {/* Search container */}
-                <div className="flex flex-col gap-4 w-full lg:w-1/3">
+                <div className="flex w-full flex-col gap-4 lg:w-1/3">
 
                     {/* Search bar */}
-                    <div className="flex border-2 rounded overflow-hidden">
+                    <div className="flex overflow-hidden rounded border-2">
                         <input
-                            className="p-2 flex-1"
+                            className="flex-1 p-2"
                             type="text"
                             placeholder="General search term..."
                         />
@@ -58,7 +56,7 @@ export default function SearchPage() {
                 </div>
 
                 {/* Result container */}
-                <div className="lg:ml-4 w-full lg:w-2/3">
+                <div className="w-full lg:ml-4 lg:w-2/3">
                     {/* <Link className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         href={'/add_record'}>
                         Temporary add record button, might delete later
