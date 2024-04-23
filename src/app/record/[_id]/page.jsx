@@ -1,4 +1,4 @@
-import { RecordItem } from "@/app/components/RecordItemSearchPage";
+import { RecordItem } from "@/app/components/RecordItem";
 
 export default async function RecordPage({ params }) {
 

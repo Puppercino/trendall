@@ -24,7 +24,7 @@ export default function RemoveBtn({ id }) {
     };
 
     return (
-        <button className="text-red-400"
+        <button className="text-red-400 mb-3"
             onClick={removeRecord}>
             <HiOutlineTrash size={24} />
         </button>
