@@ -1,9 +1,9 @@
 "use client";
-
 import React, { useState } from 'react';
-import RecordListSearchPage from "@/app/components/RecordList";
+import RecordList from "@/app/components/RecordList";
 import { FiSearch } from "react-icons/fi";
 import Link from "next/link";
+
 
 // Attribute
 const Attribute = ({ name }) => {
@@ -13,21 +13,39 @@ const Attribute = ({ name }) => {
         <div className="flex flex-col">
             <button
                 onClick={() => setIsEditing(!isEditing)}
-                className="border-2 p-2 rounded mb-2 text-left">
+                className="mb-2 rounded border-2 p-2 text-left">
                 {name}
             </button>
             {isEditing && (
                 <input
                     type="text"
                     placeholder={`Enter Attribute ${name}`}
-                    className="border-2 p-2 rounded mb-2"
+                    className="mb-2 rounded border-2 p-2"
                     onBlur={() => setIsEditing(false)} />
             )}
         </div>
     );
 };
 
+
 export default function SearchPage() {
+    const [searchResults, setSearchResults] = useState([]);
+    const [searchTerm, setSearchTerm] = useState([]);
+
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        console.log(searchTerm.toString());
+        const res = await fetch(`/api/search?term=${searchTerm.toString()}`);
+        console.log(res)
+        const data = await res.json();
+        setSearchResults(data);
+    };
+
+    const termInputHandler = async (e) => {
+        setSearchTerm(e.target.value);
+        console.log(searchTerm)
+    }
+
     return (
         <div className="container mx-auto p-4">
 
@@ -37,16 +55,20 @@ export default function SearchPage() {
                 <div className="flex w-full flex-col gap-4 lg:w-1/3">
 
                     {/* Search bar */}
-                    <div className="flex overflow-hidden rounded border-2">
-                        <input
-                            className="flex-1 p-2"
-                            type="text"
-                            placeholder="General search term..."
-                        />
-                        <button className="bg-gray-200 p-2">
-                            <FiSearch size={24} />
-                        </button>
-                    </div>
+                    <form onSubmit={handleSearch}>
+                        <div className="flex overflow-hidden rounded border-2">
+                            <input
+                                value={searchTerm}
+                                onChange={termInputHandler}
+                                className="flex-1 p-2"
+                                type="text"
+                                placeholder="General search term..."
+                            />
+                            <button type="submit" className="bg-gray-200 p-2">
+                                <FiSearch size={24} />
+                            </button>
+                        </div>
+                    </form>
 
                     {/* Attribute Box */}
                     <div className="flex flex-col gap-4">
@@ -64,20 +86,20 @@ export default function SearchPage() {
                         Temporary add record button, might delete later
                     </Link> */}
                     <div className="flex justify-start">
-                        <Link className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-fit"
+                        <Link className="w-fit rounded bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-600"
                             href={'/record'}>
                             Show all records
                         </Link>
                     </div>
 
                     {/* Change limit here */}
-                    <RecordListSearchPage limit={20} />
+                    <RecordList records={searchResults} limit={20} />
                 </div>
 
             </div>
 
             <div className="flex justify-end">
-                <Link className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded w-fit"
+                <Link className="w-fit rounded bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-600"
                     href={'/record'}>
                     Show all records
                 </Link>

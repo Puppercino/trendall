@@ -1,5 +1,5 @@
 "use client";
-import RecordListSearchPage from "./components/RecordList";
+import RecordList from "./components/RecordList";
 
 export default function HomePage() {
   return (

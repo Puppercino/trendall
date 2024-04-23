@@ -1,28 +1,28 @@
+"use client";
+
 import Link from "next/link";
-import RemoveBtn from "@/app/components/RemoveBtn";
 import { RecordItem } from "@/app/components/RecordItem";
-import { HiPencilAlt } from "react-icons/hi";
 
-const getRecords = async () => {
-    try {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
-            cache: 'no-store',
-        });
+// const getRecords = async () => {
+//     try {
+//         const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+//             cache: 'no-store',
+//         });
 
-        if (!res.ok) {
-            throw new Error('Failed to fetch records')
-        }
+//         if (!res.ok) {
+//             throw new Error('Failed to fetch records')
+//         }
 
-        return res.json();
+//         return res.json();
 
-    } catch (error) {
-        console.error(error)
-    }
-};
+//     } catch (error) {
+//         console.error(error)
+//     }
+// };
 
-export default async function RecordListSearchPage({ limit = -1 }) {
+export default async function RecordList({ records, limit = -1 }) {
 
-    const { records } = await getRecords();
+    // const { records } = await getRecords();
     const slicedRecords = records.slice(0, limit);
 
     return (
