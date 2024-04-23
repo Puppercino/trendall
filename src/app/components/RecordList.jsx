@@ -1,6 +1,6 @@
 import Link from "next/link";
 import RemoveBtn from "@/app/components/RemoveBtn";
-import { RecordItem } from "@/app/components/RecordItemSearchPage";
+import { RecordItem } from "@/app/components/RecordItem";
 import { HiPencilAlt } from "react-icons/hi";
 
 const getRecords = async () => {
@@ -20,10 +20,10 @@ const getRecords = async () => {
     }
 };
 
-export default async function RecordListSearchPage() {
+export default async function RecordListSearchPage({ limit = -1 }) {
 
     const { records } = await getRecords();
-    const slicedRecords = records.slice(0, 20); // Change limit here
+    const slicedRecords = records.slice(0, limit);
 
     return (
         <ul>
@@ -43,14 +43,6 @@ export default async function RecordListSearchPage() {
                         publication={record.publication}
                         description={record.description}
                     />
-
-                    {/* Include 2 buttons in record list in edit database page */}
-                    {/* <div>
-                        <RemoveBtn id={record._id} />
-                        <Link href={`/edit_record/${record._id}`}>
-                            <HiPencilAlt size={24} />
-                        </Link>
-                    </div> */}
 
                 </li>
             ))}

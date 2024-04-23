@@ -1,5 +1,7 @@
+"use client";
+
 import React, { useState } from 'react';
-import RecordListSearchPage from "@/app/components/RecordListSearchPage";
+import RecordListSearchPage from "@/app/components/RecordList";
 import { FiSearch } from "react-icons/fi";
 import Link from "next/link";
 
@@ -68,7 +70,8 @@ export default function SearchPage() {
                         </Link>
                     </div>
 
-                    <RecordListSearchPage />
+                    {/* Change limit here */}
+                    <RecordListSearchPage limit={20} />
                 </div>
 
             </div>
