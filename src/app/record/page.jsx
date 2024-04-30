@@ -1,4 +1,5 @@
 import RecordList from "@/app/components/RecordList";
+import Link from "next/link";
 
 const getRecords = async () => {
     try {
@@ -23,7 +24,16 @@ export default async function AllRecordsPage() {
 
     return (
         <ul>
-            <h1>All Records</h1>
+            <div className="flex items-center justify-between">
+
+                <h1>All Records</h1>
+
+                <Link className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    href={'/add_record'}>
+                    Temporary add record button
+                </Link>
+
+            </div>
 
             <RecordList records={records} />
 

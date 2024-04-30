@@ -25,7 +25,7 @@ export default function EditRecordForm({ id, ref_no, shape }) {
                 throw new Error('Failed to update record');
             }
 
-            router.push('/search'); // Navigate to home screen
+            router.push('/record'); // Navigate to record screen
             router.refresh();
 
         } catch (error) {

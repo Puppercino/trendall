@@ -30,7 +30,7 @@ export default function AddRecord() {
                 throw new Error('Failed to create record');
             }
 
-            router.push('/search'); // Navigate to search screen
+            router.push('/record'); // Navigate to record screen
             router.refresh();
 
         } catch (error) {
