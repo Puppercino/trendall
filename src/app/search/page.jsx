@@ -81,10 +81,7 @@ export default function SearchPage() {
 
                 {/* Result container */}
                 <div className="w-full lg:ml-4 lg:w-2/3">
-                    {/* <Link className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        href={'/add_record'}>
-                        Temporary add record button, might delete later
-                    </Link> */}
+                    
                     <div className="flex justify-start">
                         <Link className="w-fit rounded bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-600"
                             href={'/record'}>

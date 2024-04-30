@@ -21,7 +21,8 @@ export default async function EditRecord({ params }) {
 
     const { id } = params;
     const { record } = await getRecordById(id);
-    const { ref_no, shape } = record;
+    const { ref_no, shape, curr_coll, prev_coll, provenance, height, diameter, plate, publication, description } = record;
 
-    return <EditRecordForm id={id} ref_no={ref_no} shape={shape} />
+    return <EditRecordForm id={id} ref_no={ref_no} shape={shape} curr_coll={curr_coll} prev_coll={prev_coll}
+        provenance={provenance} height={height} diameter={diameter} plate={plate} publication={publication} description={description} />
 }
