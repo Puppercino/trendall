@@ -1,4 +1,6 @@
-import json, re, pandas
+import json, re
+
+image_path = "images/"
 
 # Create a list of shape references
 with open("shapes.txt", "r") as f:
@@ -37,6 +39,7 @@ def clean_record_list(raw_list):
     return raw_list
 
 
+# Clean the record list of false records
 record_list = clean_record_list(record_list)
 
 
@@ -267,6 +270,76 @@ def get_plate(record):
     if any(point in record for point in break_points):
         plate_value = re.split(plate_regex, record)[1].strip()
         plate = plate_value.split("\n", maxsplit=1)[0].strip()
+
+        # Handle wrong encoding of plate number
+        plate = (
+            plate.replace("\\", "1")
+            .replace("I", "1")
+            .replace("H", "11")
+            .replace("a>", "d, e")
+            .replace("c,*", "c, d")
+            .replace("34*", "34b")
+            .replace("a,*", "a,b")
+            .replace("/", "f")
+            .replace('^0"', "c, d")
+            .replace("erf", "c, d")
+            .replace('a"', "d")
+            .replace("a'", "d")
+            .replace("o'", "d")
+            .replace('0"', "d")
+            .replace("A", "b")
+            .replace("a,o", "a, b")
+            .replace("a,i", "a, b")
+            .replace("a,6", "a, b")
+            .replace("a,4", "a, b")
+            .replace("f,^", "f, g")
+            .replace("<r", "c")
+            .replace("<;", "c")
+            .replace('SS^o"', "85 c, d")
+            .replace("830", "83 d")
+            .replace("c, a", "c, d")
+            .replace("c,^", "c, d")
+            .replace("c,rf", "c, d")
+            .replace("62*", "62 b")
+            .replace("llb", "115")
+            .replace("c,f", "e, f")
+            .replace("^", "g")
+            .replace("134 b", "134 h")
+            .replace("134?", "134 i")
+            .replace(" 4", " b")
+            .replace("b9", "49")
+            .replace("Ulfig", "141 f, g")
+            .replace("1424", "142 b")
+            .replace("142c", "142 e")
+            .replace("142b", "142 h")
+            .replace("142f", "142 j")
+            .replace("142*", "142 k")
+            .replace("143a", "143 d")
+            .replace("143c", "143 e")
+            .replace("*", "b")
+            .replace("144a", "144 d")
+            .replace("144 c", "144 e")
+            .replace("U", "14")
+            .replace("1494c", "149 d, e")
+            .replace("163 0g", "163 b, c")
+            .replace("band", "b and")
+            .replace("171 c", "171 e")
+            .replace("173 c", "173 e")
+            .replace("176 c", "176 e")
+            .replace("185 c", "185 e")
+            .replace("189 c", "189 e")
+            .replace("193 c", "193 e")
+            .replace("200 c", "200 e")
+            .replace("201 c", "201 e")
+            .replace("178c", "178 e")
+            .replace("1744", "174 b")
+            .replace("1754", "175 b")
+            .replace("1794", "179 b")
+            .replace("183 0g", "183 d, e")
+            .replace(",", ", ")
+        )
+        plate = re.sub(r"(\d)([a-zA-Z])", r"\1 \2", plate)
+
         return plate
     else:
         return ""
@@ -351,52 +424,11 @@ def get_description(record):
     return description
 
 
-# TODO: Match record with image based on reference number
-def match_plate(Plate, referenceNo, imagePlate, refImage):
-    NewPlate = []
-    Text = ""
+def get_image(record):
+    plate = get_plate(record)
+    plate_no = re.search(r"\d+", plate)
 
-    for i in range(len(Plate)):
-        plate = Plate[i].replace(" ", "-")
-        plate = Plate[i].lower()
-        for char in plate:
-            if char.islower():
-                charNum = ord(char) - 96
-                Text = Text + " " + str(charNum)
-            else:
-                Text = Text + str(char)
-        NewPlate.append(Text)
-        Text = ""
-
-    regSpace = re.compile(r"\s+")
-    for i in range(len(NewPlate)):
-        NewPlate[i] = NewPlate[i].strip()
-        NewPlate[i] = NewPlate[i].replace(",", " ")
-        NewPlate[i] = regSpace.sub(" ", NewPlate[i])
-        NewPlate[i] = NewPlate[i].replace(" ", "-")
-        NewPlate[i] = NewPlate[i].replace("--", "-")
-
-    for i in range(len(NewPlate)):
-        count = NewPlate[i].count("-", 0, len(NewPlate[i]))
-        if count < 2:
-            imagePlate.append(NewPlate[i])
-            refImage.append(referenceNo[i])
-        else:
-            imageID = NewPlate[i].split(sep="-", maxsplit=count)[0]
-            plateList = NewPlate[i].split(sep="-", maxsplit=count)
-            for j in range(1, len(plateList)):
-                imagePlate.append(imageID + "-" + plateList[j])
-                refImage.append(referenceNo[i])
-
-    for i in range(len(imagePlate)):
-        if imagePlate[i] == "":
-            refImage[i] = refImage[i].replace(refImage[i], "")
-
-    while "" in imagePlate:
-        imagePlate.remove("")
-
-    while "" in refImage:
-        refImage.remove("")
+    return plate_no.group() if plate_no else ""
 
 
 def get_all_attributes(record):
@@ -411,6 +443,7 @@ def get_all_attributes(record):
         "plate": get_plate(record) if get_plate(record) else None,
         "publication": get_publication(record) if get_publication(record) else None,
         "description": get_description(record) if get_description(record) else None,
+        "image": get_image(record) + ".png" if get_image(record) else None,
     }
     json_record = json.dumps(attributes, indent=4)
 
