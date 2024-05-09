@@ -34,8 +34,16 @@ export default function EditRecordForm({ id, ref_no, shape, curr_coll, prev_coll
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    new_ref: newRefNo, new_shape: newShape, new_curr_coll: newCurrColl, new_prev_coll: newPrevColl, new_provenance: newProvenance,
-                    new_height: newHeight, new_diameter: newDiameter, new_plate: newPlate, new_publication: newPublication, new_description: newDescription
+                    new_ref: newRefNo,
+                    new_shape: newShape,
+                    new_curr_coll: newCurrColl,
+                    new_prev_coll: newPrevColl,
+                    new_provenance: newProvenance,
+                    new_height: newHeight,
+                    new_diameter: newDiameter,
+                    new_plate: newPlate,
+                    new_publication: newPublication,
+                    new_description: newDescription,
                 })
             });
 
@@ -43,7 +51,7 @@ export default function EditRecordForm({ id, ref_no, shape, curr_coll, prev_coll
                 throw new Error('Failed to update record');
             }
 
-            router.push('/record'); // Navigate to record screen
+            router.push(`/record/${id}`); // Navigate to record page screen
             router.refresh();
 
         } catch (error) {

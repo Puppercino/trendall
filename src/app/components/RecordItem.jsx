@@ -41,11 +41,11 @@ export function RecordItem(props) {
                 </div>
 
                 {/* <div className="flex flex-col justify-center mr-4">
-                <RemoveBtn id={props.id} />
-                <Link href={`/edit_record/${props.id}`}>
-                    <HiPencilAlt size={24} />
-                </Link>
-            </div> */}
+                    <RemoveBtn id={props.id} />
+                    <Link href={`/edit_record/${props.id}`}>
+                        <HiPencilAlt size={24} />
+                    </Link>
+                </div> */}
 
             </div>
         </Link>

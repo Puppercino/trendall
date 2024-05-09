@@ -1,28 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { RecordItem } from "@/app/components/RecordItem";
-
-// const getRecords = async () => {
-//     try {
-//         const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
-//             cache: 'no-store',
-//         });
-
-//         if (!res.ok) {
-//             throw new Error('Failed to fetch records')
-//         }
-
-//         return res.json();
-
-//     } catch (error) {
-//         console.error(error)
-//     }
-// };
 
 export default async function RecordList({ records, limit = -1 }) {
 
-    // const { records } = await getRecords();
     const slicedRecords = records.slice(0, limit);
 
     return (
