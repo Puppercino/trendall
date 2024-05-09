@@ -1,7 +1,5 @@
 import json, re
 
-image_path = "images/"
-
 # Create a list of shape references
 with open("shapes.txt", "r") as f:
     shape_list = [line.strip() for line in f if line.strip()]

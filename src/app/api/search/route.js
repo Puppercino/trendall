@@ -1,5 +1,5 @@
 // pages/api/search.js
-import {getAllRecords} from "@/app/api/db/controller/record_controller";
+import { getAllRecords } from "@/app/api/db/controller/record_controller";
 import { NextResponse, NextRequest } from "next/server";
 import Record from "@/app/api/db/model/record_model";
 
