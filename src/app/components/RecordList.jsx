@@ -23,6 +23,7 @@ export default async function RecordList({ records, limit = -1 }) {
                         plate={record.plate}
                         publication={record.publication}
                         description={record.description}
+                        image={record.image}
                     />
 
                 </li>
