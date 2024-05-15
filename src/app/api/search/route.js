@@ -1,4 +1,5 @@
 // pages/api/search.js
+export const dynamic = "force-dynamic";
 import { NextResponse, NextRequest } from "next/server";
 import Record from "@/app/api/db/model/record_model";
 

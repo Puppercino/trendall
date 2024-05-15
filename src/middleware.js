@@ -2,6 +2,8 @@ export { default } from "next-auth/middleware";
 
 export const config = {
     matcher: [
-        "/dashboard"
+        "/dashboard/:path*",
+        "/record/[_id]/edit",
+        "/record/add",
     ]
 };
