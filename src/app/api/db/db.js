@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const dbConnection = async () => {
-    // console.log("Connecting to database " + process.env.DB_NAME + "...");
+
     if (mongoose.connection.readyState >= 1) { return; }
 
     try {

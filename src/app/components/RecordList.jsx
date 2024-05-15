@@ -1,29 +1,10 @@
-import Link from "next/link";
-import RemoveBtn from "@/app/components/RemoveBtn";
+"use client";
+
 import { RecordItem } from "@/app/components/RecordItem";
-import { HiPencilAlt } from "react-icons/hi";
 
-const getRecords = async () => {
-    try {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
-            cache: 'no-store',
-        });
+export default async function RecordList({ records, limit = -1 }) {
 
-        if (!res.ok) {
-            throw new Error('Failed to fetch records')
-        }
-
-        return res.json();
-
-    } catch (error) {
-        console.error(error)
-    }
-};
-
-export default async function RecordListSearchPage() {
-
-    const { records } = await getRecords();
-    const slicedRecords = records.slice(0, 20);
+    const slicedRecords = records.slice(0, limit);
 
     return (
         <ul>
@@ -42,15 +23,8 @@ export default async function RecordListSearchPage() {
                         plate={record.plate}
                         publication={record.publication}
                         description={record.description}
+                        image={record.image}
                     />
-
-                    {/* Include 2 buttons in record list in edit database page */}
-                    {/* <div>
-                        <RemoveBtn id={record._id} />
-                        <Link href={`/edit_record/${record._id}`}>
-                            <HiPencilAlt size={24} />
-                        </Link>
-                    </div> */}
 
                 </li>
             ))}

@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 
 // Create a new record
 export async function POST(req) {
-    const { ref_no, shape } = await req.json();
+    const { ref_no, shape, curr_coll, prev_coll, provenance, height, diameter, plate, publication, description } = await req.json();
     await dbConnection();
-    await Record.create({ ref_no, shape });
+    await Record.create({ ref_no, shape, curr_coll, prev_coll, provenance, height, diameter, plate, publication, description });
     return NextResponse.json({ message: "Record created" }, { status: 201 });
 }
 
