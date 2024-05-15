@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import RecordList from "@/app/components/RecordList";
 import Link from "next/link";
 
