@@ -5,7 +5,6 @@ import RecordList from "@/app/components/RecordList";
 import { FiSearch } from "react-icons/fi";
 import { TiDelete } from "react-icons/ti";
 import Link from "next/link";
-import { set } from 'mongoose';
 
 const getRecords = async () => {
     try {
