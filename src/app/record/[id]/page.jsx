@@ -53,8 +53,7 @@ export default async function RecordPage({ params }) {
                 </div>
 
                 <div className="flex flex-col justify-start">
-                    <h1>Record {record._id}</h1>
-                    {/* <p>Ref No: {record.ref_no}</p> */}
+                    <h1>Record information:</h1>
                     <p>Shape: {record.shape}</p>
                     <p>Current Collection: {curr_coll}</p>
                     <p>Previous Collection: {prev_coll}</p>
