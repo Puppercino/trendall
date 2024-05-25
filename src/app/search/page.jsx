@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const getRecords = async () => {
     try {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+        const res = await fetch(`/api/db/routes`, {
             cache: 'no-store',
         });
 
@@ -24,7 +24,7 @@ const getRecords = async () => {
 };
 
 // Attribute
-const Attribute = ({ attribute, name, onValueChange, setFilteredAttr }) => {
+const Attribute = ({ attribute, name, onValueChange, setFilteredAttr, getRecordResults }) => {
 
     const [isEditing, setIsEditing] = useState(false);
     const [value, setValue] = useState('');
@@ -148,6 +148,28 @@ export default function SearchPage() {
         fetchRecords();
     }, []);
 
+    useEffect(() => {
+        const term = filteredAttr.map(item => item.name).join('&');
+
+        const getFilterResults = async (term) => {
+            try {
+                const res = await fetch(`/api/search?term=${term}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setRecords(data);
+                    setRecords(data);
+
+                } else {
+                    console.error('Failed to fetch records');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getFilterResults(term);
+    }, [filteredAttr, filteredResults]);
+
+
     const attrs = ["Shape", "Current Collection", "Previous Collection", "Provenance", "Height", "Diameter", "With images"];
     const attrDropdown = (item) => {
         switch (item) {
@@ -209,14 +231,27 @@ export default function SearchPage() {
         setSearchTerm(term);
     }
 
-    const handleValueChange = (value) => {
+    const handleValueChange = async (value) => {
         const newFilteredResults = searchResults.filter(result => result.attributes.includes(value));
         setFilteredResults(newFilteredResults);
         setFilteredAttr(prevFilters => [...prevFilters, { name: value }]);
+
+        console.log('ok');
+        const res = await fetch(`/api/search?term=${filteredAttr}`);
+        if (res.ok) {
+            const data = await res.json();
+            getRecordResults(data);
+        } else {
+            console.error('Failed to fetch records');
+        }
     };
 
     const handleDeleteFilter = (value) => {
+        console.log(filteredAttr);
+        console.log(value);
+
         setFilteredAttr(prevFilters => prevFilters.filter((_, i) => i !== value));
+
     };
 
     return (
