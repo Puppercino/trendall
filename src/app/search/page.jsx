@@ -24,7 +24,7 @@ const getRecords = async () => {
 };
 
 // Attribute
-const Attribute = ({ attribute, name, onValueChange, setFilteredAttr, getRecordResults }) => {
+const Attribute = ({ attribute, name, onValueChange, setFilteredAttr }) => {
 
     const [isEditing, setIsEditing] = useState(false);
     const [value, setValue] = useState('');
@@ -170,7 +170,7 @@ export default function SearchPage() {
     }, [filteredAttr, filteredResults]);
 
 
-    const attrs = ["Shape", "Current Collection", "Previous Collection", "Provenance", "Height", "Diameter", "With images"];
+    const attrs = ["Shape", "Current Collection", "Previous Collection", "Provenance", "With images"];
     const attrDropdown = (item) => {
         switch (item) {
             case 'Shape':
