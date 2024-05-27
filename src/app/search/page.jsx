@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const getRecords = async () => {
     try {
-        const res = await fetch(`/api/db/routes`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
             cache: 'no-store',
         });
 
@@ -157,7 +157,7 @@ export default function SearchPage() {
                 if (res.ok) {
                     const data = await res.json();
                     setRecords(data);
-                    setRecords(data);
+                    // setRecords(data);
 
                 } else {
                     console.error('Failed to fetch records');
@@ -209,27 +209,13 @@ export default function SearchPage() {
                     }
                     return null;
                 }))].filter(Boolean).sort();
-            // case 'Height':
-            //     return [...new Set(records.map(record => record.height))].sort();
-            // case 'Diameter':
-            //     return [...new Set(records.map(record => record.diameter))].sort();
+            // TODO: case 'With images': true/false
             // case 'With images':
             //     return [...new Set(records.map(record => record.images))].sort();
             default:
                 return [];
         }
     };
-
-    // const handleSearch = async (e) => {
-    //     e.preventDefault();
-    //     const res = await fetch(`/api/search?term=${searchTerm}`);
-    //     const data = await res.json();
-    //     setSearchResults(data);
-    // };
-
-    const termInputHandler = (term) => {
-        setSearchTerm(term);
-    }
 
     const handleValueChange = async (value) => {
         const newFilteredResults = searchResults.filter(result => result.attributes.includes(value));
@@ -247,11 +233,7 @@ export default function SearchPage() {
     };
 
     const handleDeleteFilter = (value) => {
-        console.log(filteredAttr);
-        console.log(value);
-
         setFilteredAttr(prevFilters => prevFilters.filter((_, i) => i !== value));
-
     };
 
     return (
@@ -274,23 +256,9 @@ export default function SearchPage() {
                                 </button>
                             </div>
                         ))}
-
                     </div>
 
-                    {/* Searchbar */}
-                    {/* <form onSubmit={handleSearch}>
-                        <div className="flex overflow-hidden rounded border-2">
-                            <input
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="flex-1 p-2"
-                                type="text"
-                                placeholder="General search term..." />
-                            <button type="submit" className="bg-blue-500 text-white p-2">
-                                <FiSearch size={24} />
-                            </button>
-                        </div>
-                    </form> */}
+                    {/* Search bar */}
                     <SearchBar
                         getRecordResults={(results) => setRecords(results)}
                     />
@@ -315,14 +283,12 @@ export default function SearchPage() {
                         </Link>
                     </div>
                     <RecordList records={records} limit={limit} />
-                    {/* <RecordList records={filteredResults.length > 0 ? filteredResults : searchResults} limit={20} /> */}
                 </div>
 
             </div>
             <div className="flex justify-end">
                 <button
                     onClick={(e) => {
-                        // TODO: prevent reloading the page
                         setLimit(limit + 30);
                     }}
                     className='text-left text-blue-500 p-1 hover:underline hover:text-blue-600'>
