@@ -2,9 +2,9 @@
 
 import { RecordItem } from "@/app/components/RecordItem";
 
-export default async function RecordList({ records, limit = -1 }) {
+export default function RecordList({ records, limit = -1 }) {
 
-    const slicedRecords = records.slice(0, limit);
+    let slicedRecords = records.slice(0, limit);
 
     return (
         <ul>

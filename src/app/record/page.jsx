@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const getRecords = async () => {
     try {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
             cache: 'no-store',
         });
 
@@ -26,18 +26,13 @@ export default async function AllRecordsPage() {
     return (
         <ul>
             <div className="flex items-center justify-between">
-
                 <h1>All Records</h1>
-
-                <Link className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                <Link className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
                     href={'/add_record'}>
                     Add record
                 </Link>
-
             </div>
-
             <RecordList records={records} />
-
         </ul>
     )
 }

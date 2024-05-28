@@ -5,11 +5,10 @@ import RecordList from "@/app/components/RecordList";
 import { FiSearch } from "react-icons/fi";
 import { TiDelete } from "react-icons/ti";
 import Link from "next/link";
-import { set } from 'mongoose';
 
 const getRecords = async () => {
     try {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
             cache: 'no-store',
         });
 
@@ -24,7 +23,6 @@ const getRecords = async () => {
     }
 };
 
-// Attribute
 const Attribute = ({ attribute, name, onValueChange, setFilteredAttr }) => {
 
     const [isEditing, setIsEditing] = useState(false);
@@ -53,32 +51,35 @@ const Attribute = ({ attribute, name, onValueChange, setFilteredAttr }) => {
 
             {/* Attribute dropdown button */}
             <button
+                className={`flex items-center justify-between border-2 p-2 text-left ${isEditing ? "rounded-t" : "rounded"}`}
                 onClick={() => {
                     setIsEditing(!isEditing);
                     if (!isEditing) {
                         setShowAll(false);
                     }
-                }}
-                className="mb-2 rounded border-2 p-2 text-left flex justify-between items-center">
+                    if (name === 'With Images') {
+                        setFilteredAttr(prevFilters => addFilter(prevFilters, 'With Images'));
+                    }
+                }}>
                 {name}
-                <span>{isEditing ? '▼' : '►'}</span>
+                {name !== "With Images" && <span>{isEditing ? '▼' : '►'}</span>}
             </button>
-            {isEditing && (
+            {isEditing && name !== "With Images" && (
                 <>
-                    <input
+                    {/* <input
                         type="text"
                         value={value}
                         onChange={e => setValue(e.target.value)}
                         placeholder={`Enter ${name}`}
                         className="mb-1 rounded border-2 p-2"
                         onBlur={handleBlur}
-                    />
-                    <div className="border-2 p-1 pl-2">
+                    /> */}
+                    <div className="border-2 rounded-b p-1 pl-2">
                         {(showAll ? attribute : attribute.slice(0, 10)).map((record, index) => (
                             <button
+                                className="w-full border-b-2 p-1 text-left hover:bg-blue-200"
                                 type='button'
                                 key={index}
-                                className="w-full text-left p-1 border-b-2 hover:bg-blue-200"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     setFilteredAttr(prevFilters => addFilter(prevFilters, record));
@@ -86,7 +87,9 @@ const Attribute = ({ attribute, name, onValueChange, setFilteredAttr }) => {
                                 {record}
                             </button>
                         ))}
-                        <button onClick={handleListAll} className='w-full text-left text-blue-500 underline p-1 hover:bg-blue-200'>
+                        <button
+                            className="w-full p-1 text-left text-blue-500 underline hover:bg-blue-200"
+                            onClick={handleListAll} >
                             {showAll ? 'Collapse' : 'List All'}
                         </button>
                     </div>
@@ -115,13 +118,13 @@ const SearchBar = ({ getRecordResults }) => {
         <form onSubmit={handleSubmit}>
             <div className="flex overflow-hidden rounded border-2">
                 <input
+                    className="flex-1 p-2"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="flex-1 p-2"
                     type="text"
                     placeholder="General search term..."
                 />
-                <button type="submit" className="bg-blue-500 text-white p-2">
+                <button className="bg-blue-500 p-2 text-white" type="submit">
                     <FiSearch size={24} />
                 </button>
             </div>
@@ -134,7 +137,6 @@ export default function SearchPage() {
     const [limit, setLimit] = useState(30); // Limit the number of records displayed
     const [searchResults, setSearchResults] = useState([]);
     const [filteredResults, setFilteredResults] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
     const [filteredAttr, setFilteredAttr] = useState([]);
     const [dropdownOptions, setDropdownOptions] = useState([]);
     const [records, setRecords] = useState([]);
@@ -149,7 +151,29 @@ export default function SearchPage() {
         fetchRecords();
     }, []);
 
-    const attrs = ["Shape", "Current Collection", "Previous Collection", "Provenance", "Height", "Diameter", "With images"];
+    useEffect(() => {
+        const hasImageFilter = filteredAttr.some(filter => filter.name === 'With Images');
+        const searchTerm = filteredAttr.filter(filter => filter.name !== 'With Images').map(filter => filter.name).join('&');
+        const fetchUrl = hasImageFilter ? `/api/search?term=${searchTerm}&image=true` : `/api/search?term=${searchTerm}`;
+
+        const getFilterResults = async () => {
+            try {
+                const res = await fetch(fetchUrl);
+                if (res.ok) {
+                    const data = await res.json();
+                    setRecords(data);
+                } else {
+                    console.error('Failed to fetch records');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getFilterResults();
+    }, [filteredAttr, filteredResults]);
+
+
+    const attrs = ["Shape", "Current Collection", "Previous Collection", "Provenance", "With Images"];
     const attrDropdown = (item) => {
         switch (item) {
             case 'Shape':
@@ -188,32 +212,15 @@ export default function SearchPage() {
                     }
                     return null;
                 }))].filter(Boolean).sort();
-            // case 'Height':
-            //     return [...new Set(records.map(record => record.height))].sort();
-            // case 'Diameter':
-            //     return [...new Set(records.map(record => record.diameter))].sort();
-            // case 'With images':
-            //     return [...new Set(records.map(record => record.images))].sort();
             default:
                 return [];
         }
     };
 
-    // const handleSearch = async (e) => {
-    //     e.preventDefault();
-    //     const res = await fetch(`/api/search?term=${searchTerm}`);
-    //     const data = await res.json();
-    //     setSearchResults(data);
-    // };
-
-    const termInputHandler = (term) => {
-        setSearchTerm(term);
-    }
-
     const handleValueChange = (value) => {
-        const newFilteredResults = searchResults.filter(result => result.attributes.includes(value));
-        setFilteredResults(newFilteredResults);
-        setFilteredAttr(prevFilters => [...prevFilters, { name: value }]);
+        // TODO: reset state if value is empty
+        const newDropdownOptions = dropdownOptions.filter(option => option.shape.toLowerCase().includes(value.toLowerCase()));
+        setDropdownOptions(newDropdownOptions);
     };
 
     const handleDeleteFilter = (value) => {
@@ -226,40 +233,24 @@ export default function SearchPage() {
             <div className="flex flex-col gap-4 lg:flex-row lg:justify-between">
 
                 {/* Left column for search and attribute filters */}
-                <div className="flex w-full flex-col gap-4 lg:w-1/3">
+                <div className="flex w-full flex-col gap-3 lg:w-1/3">
 
                     <div className='flex flex-row'>
-                        <span className="font-bold mr-2">Filter:</span>
+                        <span className="mr-2 font-bold">Filter:</span>
 
                         {/* Filter item */}
                         {filteredAttr.map((filter, index) => (
-                            <div key={index} className="flex items-center space-x-2 mr-2">
+                            <div className="mr-2 flex items-center space-x-2" key={index} >
                                 <span>{filter.name}</span>
                                 <button onClick={() => handleDeleteFilter(index)}>
                                     <TiDelete color='red' size={20} />
                                 </button>
                             </div>
                         ))}
-
                     </div>
 
-                    {/* Searchbar */}
-                    {/* <form onSubmit={handleSearch}>
-                        <div className="flex overflow-hidden rounded border-2">
-                            <input
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="flex-1 p-2"
-                                type="text"
-                                placeholder="General search term..." />
-                            <button type="submit" className="bg-blue-500 text-white p-2">
-                                <FiSearch size={24} />
-                            </button>
-                        </div>
-                    </form> */}
-                    <SearchBar
-                        getRecordResults={(results) => setRecords(results)}
-                    />
+                    {/* Search bar */}
+                    <SearchBar getRecordResults={(results) => setRecords(results)} />
 
                     {/* Dropdown */}
                     {attrs.map((item, i) => (
@@ -281,17 +272,15 @@ export default function SearchPage() {
                         </Link>
                     </div>
                     <RecordList records={records} limit={limit} />
-                    {/* <RecordList records={filteredResults.length > 0 ? filteredResults : searchResults} limit={20} /> */}
                 </div>
 
             </div>
             <div className="flex justify-end">
                 <button
+                    className="p-1 text-left text-blue-500 hover:text-blue-600 hover:underline"
                     onClick={(e) => {
-                        // TODO: prevent reloading the page
                         setLimit(limit + 30);
-                    }}
-                    className='text-left text-blue-500 p-1 hover:underline hover:text-blue-600'>
+                    }}>
                     More records...
                 </button>
             </div>
