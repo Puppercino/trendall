@@ -160,6 +160,7 @@ export default function SearchPage() {
 
         const getFilterResults = async () => {
             try {
+                console.log("Fetching: " + fetchUrl)
                 const res = await fetch(fetchUrl);
                 if (res.ok) {
                     const data = await res.json();
@@ -171,7 +172,7 @@ export default function SearchPage() {
                 console.error(error);
             }
         };
-        getFilterResults();
+        //getFilterResults();
     }, [filteredAttr, filteredResults]);
 
 
