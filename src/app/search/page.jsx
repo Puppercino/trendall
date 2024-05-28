@@ -51,6 +51,7 @@ const Attribute = ({ attribute, name, onValueChange, setFilteredAttr }) => {
 
             {/* Attribute dropdown button */}
             <button
+                className="mb-2 flex items-center justify-between rounded border-2 p-2 text-left"
                 onClick={() => {
                     setIsEditing(!isEditing);
                     if (!isEditing) {
@@ -59,8 +60,7 @@ const Attribute = ({ attribute, name, onValueChange, setFilteredAttr }) => {
                     if (name === 'With Images') {
                         setFilteredAttr(prevFilters => addFilter(prevFilters, 'With Images'));
                     }
-                }}
-                className="mb-2 rounded border-2 p-2 text-left flex justify-between items-center">
+                }}>
                 {name}
                 {name !== "With Images" && <span>{isEditing ? '▼' : '►'}</span>}
             </button>
@@ -77,9 +77,9 @@ const Attribute = ({ attribute, name, onValueChange, setFilteredAttr }) => {
                     <div className="border-2 p-1 pl-2">
                         {(showAll ? attribute : attribute.slice(0, 10)).map((record, index) => (
                             <button
+                                className="w-full border-b-2 p-1 text-left hover:bg-blue-200"
                                 type='button'
                                 key={index}
-                                className="w-full text-left p-1 border-b-2 hover:bg-blue-200"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     setFilteredAttr(prevFilters => addFilter(prevFilters, record));
@@ -87,7 +87,9 @@ const Attribute = ({ attribute, name, onValueChange, setFilteredAttr }) => {
                                 {record}
                             </button>
                         ))}
-                        <button onClick={handleListAll} className='w-full text-left text-blue-500 underline p-1 hover:bg-blue-200'>
+                        <button
+                            className="w-full p-1 text-left text-blue-500 underline hover:bg-blue-200"
+                            onClick={handleListAll} >
                             {showAll ? 'Collapse' : 'List All'}
                         </button>
                     </div>
@@ -116,13 +118,13 @@ const SearchBar = ({ getRecordResults }) => {
         <form onSubmit={handleSubmit}>
             <div className="flex overflow-hidden rounded border-2">
                 <input
+                    className="flex-1 p-2"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="flex-1 p-2"
                     type="text"
                     placeholder="General search term..."
                 />
-                <button type="submit" className="bg-blue-500 text-white p-2">
+                <button className="bg-blue-500 p-2 text-white" type="submit">
                     <FiSearch size={24} />
                 </button>
             </div>
@@ -234,11 +236,11 @@ export default function SearchPage() {
                 <div className="flex w-full flex-col gap-3 lg:w-1/3">
 
                     <div className='flex flex-row'>
-                        <span className="font-bold mr-2">Filter:</span>
+                        <span className="mr-2 font-bold">Filter:</span>
 
                         {/* Filter item */}
                         {filteredAttr.map((filter, index) => (
-                            <div key={index} className="flex items-center space-x-2 mr-2">
+                            <div className="mr-2 flex items-center space-x-2" key={index} >
                                 <span>{filter.name}</span>
                                 <button onClick={() => handleDeleteFilter(index)}>
                                     <TiDelete color='red' size={20} />
@@ -275,10 +277,10 @@ export default function SearchPage() {
             </div>
             <div className="flex justify-end">
                 <button
+                    className="p-1 text-left text-blue-500 hover:text-blue-600 hover:underline"
                     onClick={(e) => {
                         setLimit(limit + 30);
-                    }}
-                    className='text-left text-blue-500 p-1 hover:underline hover:text-blue-600'>
+                    }}>
                     More records...
                 </button>
             </div>

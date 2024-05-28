@@ -11,10 +11,10 @@ export function RecordItem(props) {
 
     return (
         <Link href={`/record/${props.id}`}>
-            <div className="my-2 flex justify-between flex-row gap-x-2 rounded border border-stone-200">
+            <div className="my-2 flex flex-row justify-between gap-x-2 rounded border border-stone-200">
                 <div className="flex">
                     <Image
-                        className={"rounded-l mr-4"}
+                        className={"mr-4 rounded-l"}
                         style={{
                             backgroundImage: `url(${image})`,
                             backgroundSize: 'cover',

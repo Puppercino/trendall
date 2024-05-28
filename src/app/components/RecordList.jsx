@@ -2,7 +2,7 @@
 
 import { RecordItem } from "@/app/components/RecordItem";
 
-export default async function RecordList({ records, limit = -1 }) {
+export default function RecordList({ records, limit = -1 }) {
 
     let slicedRecords = records.slice(0, limit);
 
