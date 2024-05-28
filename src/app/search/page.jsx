@@ -142,6 +142,7 @@ export default function SearchPage() {
     const [dropdownOptions, setDropdownOptions] = useState([]);
     const [records, setRecords] = useState([]);
 
+    // Get initial set of records and dropdown options from API.
     useEffect(() => {
         const fetchRecords = async () => {
             const res = await getRecords();
@@ -152,6 +153,9 @@ export default function SearchPage() {
         fetchRecords();
     }, []);
 
+
+    // Activates filters applied from the dropdown.
+    // TODO: Likely causes complete crash the entire production server somehow. Investigate.
     useEffect(() => {
         const hasImageFilter = filteredAttr.some(filter => filter.name === 'With Images');
         const searchTerm = filteredAttr.filter(filter => filter.name !== 'With Images').map(filter => filter.name).join('&');
@@ -172,7 +176,7 @@ export default function SearchPage() {
                 console.error(error);
             }
         };
-        //getFilterResults();
+        //getFilterResults();       // This breaks search for now.
     }, [filteredAttr, filteredResults]);
 
 
