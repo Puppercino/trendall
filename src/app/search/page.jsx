@@ -23,7 +23,6 @@ const getRecords = async () => {
     }
 };
 
-// Attribute
 const Attribute = ({ attribute, name, onValueChange, setFilteredAttr }) => {
 
     const [isEditing, setIsEditing] = useState(false);
@@ -57,12 +56,15 @@ const Attribute = ({ attribute, name, onValueChange, setFilteredAttr }) => {
                     if (!isEditing) {
                         setShowAll(false);
                     }
+                    if (name === 'With Images') {
+                        setFilteredAttr(prevFilters => addFilter(prevFilters, 'With Images'));
+                    }
                 }}
                 className="mb-2 rounded border-2 p-2 text-left flex justify-between items-center">
                 {name}
-                <span>{isEditing ? '▼' : '►'}</span>
+                {name !== "With Images" && <span>{isEditing ? '▼' : '►'}</span>}
             </button>
-            {isEditing && (
+            {isEditing && name !== "With Images" && (
                 <>
                     <input
                         type="text"
@@ -133,7 +135,6 @@ export default function SearchPage() {
     const [limit, setLimit] = useState(30); // Limit the number of records displayed
     const [searchResults, setSearchResults] = useState([]);
     const [filteredResults, setFilteredResults] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
     const [filteredAttr, setFilteredAttr] = useState([]);
     const [dropdownOptions, setDropdownOptions] = useState([]);
     const [records, setRecords] = useState([]);
@@ -149,16 +150,16 @@ export default function SearchPage() {
     }, []);
 
     useEffect(() => {
-        const term = filteredAttr.map(item => item.name).join('&');
+        const hasImageFilter = filteredAttr.some(filter => filter.name === 'With Images');
+        const searchTerm = filteredAttr.filter(filter => filter.name !== 'With Images').map(filter => filter.name).join('&');
+        const fetchUrl = hasImageFilter ? `/api/search?term=${searchTerm}&image=true` : `/api/search?term=${searchTerm}`;
 
-        const getFilterResults = async (term) => {
+        const getFilterResults = async () => {
             try {
-                const res = await fetch(`/api/search?term=${term}`);
+                const res = await fetch(fetchUrl);
                 if (res.ok) {
                     const data = await res.json();
                     setRecords(data);
-                    // setRecords(data);
-
                 } else {
                     console.error('Failed to fetch records');
                 }
@@ -166,11 +167,11 @@ export default function SearchPage() {
                 console.error(error);
             }
         };
-        getFilterResults(term);
+        getFilterResults();
     }, [filteredAttr, filteredResults]);
 
 
-    const attrs = ["Shape", "Current Collection", "Previous Collection", "Provenance", "With images"];
+    const attrs = ["Shape", "Current Collection", "Previous Collection", "Provenance", "With Images"];
     const attrDropdown = (item) => {
         switch (item) {
             case 'Shape':
@@ -209,27 +210,15 @@ export default function SearchPage() {
                     }
                     return null;
                 }))].filter(Boolean).sort();
-            // TODO: case 'With images': true/false
-            // case 'With images':
-            //     return [...new Set(records.map(record => record.images))].sort();
             default:
                 return [];
         }
     };
 
-    const handleValueChange = async (value) => {
-        const newFilteredResults = searchResults.filter(result => result.attributes.includes(value));
-        setFilteredResults(newFilteredResults);
-        setFilteredAttr(prevFilters => [...prevFilters, { name: value }]);
-
-        console.log('ok');
-        const res = await fetch(`/api/search?term=${filteredAttr}`);
-        if (res.ok) {
-            const data = await res.json();
-            getRecordResults(data);
-        } else {
-            console.error('Failed to fetch records');
-        }
+    const handleValueChange = (value) => {
+        // TODO: reset state if value is empty
+        const newDropdownOptions = dropdownOptions.filter(option => option.shape.toLowerCase().includes(value.toLowerCase()));
+        setDropdownOptions(newDropdownOptions);
     };
 
     const handleDeleteFilter = (value) => {
@@ -242,7 +231,7 @@ export default function SearchPage() {
             <div className="flex flex-col gap-4 lg:flex-row lg:justify-between">
 
                 {/* Left column for search and attribute filters */}
-                <div className="flex w-full flex-col gap-4 lg:w-1/3">
+                <div className="flex w-full flex-col gap-3 lg:w-1/3">
 
                     <div className='flex flex-row'>
                         <span className="font-bold mr-2">Filter:</span>
@@ -259,9 +248,7 @@ export default function SearchPage() {
                     </div>
 
                     {/* Search bar */}
-                    <SearchBar
-                        getRecordResults={(results) => setRecords(results)}
-                    />
+                    <SearchBar getRecordResults={(results) => setRecords(results)} />
 
                     {/* Dropdown */}
                     {attrs.map((item, i) => (
