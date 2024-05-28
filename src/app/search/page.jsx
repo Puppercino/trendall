@@ -74,7 +74,7 @@ const Attribute = ({ attribute, name, onValueChange, setFilteredAttr }) => {
                         className="mb-1 rounded border-2 p-2"
                         onBlur={handleBlur}
                     /> */}
-                    <div className="border-2 rounded-b p-1 pl-2">
+                    <div className="rounded-b border-2 p-1 pl-2">
                         {(showAll ? attribute : attribute.slice(0, 10)).map((record, index) => (
                             <button
                                 className="w-full border-b-2 p-1 text-left hover:bg-blue-200"
@@ -153,11 +153,11 @@ export default function SearchPage() {
     }, []);
 
 
-    const hasImageFilter = filteredAttr.some(filter => filter.name === 'With Images');
-    const searchTerm = filteredAttr.filter(filter => filter.name !== 'With Images').map(filter => filter.name).join('&');
     // Activates filters applied from the dropdown.
     // TODO: Likely causes complete crash the entire production server somehow. Investigate.
     useEffect(() => {
+        const hasImageFilter = filteredAttr.some(filter => filter.name === 'With Images');
+        const searchTerm = filteredAttr.filter(filter => filter.name !== 'With Images').map(filter => filter.name).join('&');
         console.log("Now checking for image with: /api/search?term=" + searchTerm);
         const fetchUrl = `/api/search?term=${searchTerm}${hasImageFilter ? '&image=true' : ''}`;
 
