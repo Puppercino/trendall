@@ -13,6 +13,7 @@ export function Navbar() {
             <div className="flex justify-center gap-5 p-5">
                 <NavLink href="/" active={pathname === "/"}>Home</NavLink>
                 <NavLink href="/search" active={pathname === "/search"}>Browse</NavLink>
+                <NavLink href="/about" active={pathname === "/about"}>About</NavLink>
                 <NavLink href="/dashboard" active={pathname === "/dashboard"}>Account</NavLink>
             </div>
         </nav>
