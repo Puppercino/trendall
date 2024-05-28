@@ -137,7 +137,6 @@ export default function SearchPage() {
 
     const [limit, setLimit] = useState(30); // Limit the number of records displayed
     const [searchResults, setSearchResults] = useState([]);
-    const [filteredResults, setFilteredResults] = useState([]);
     const [filteredAttr, setFilteredAttr] = useState([]);
     const [dropdownOptions, setDropdownOptions] = useState([]);
     const [records, setRecords] = useState([]);
@@ -146,7 +145,7 @@ export default function SearchPage() {
     useEffect(() => {
         const fetchRecords = async () => {
             const res = await getRecords();
-            setRecords(res.records);
+            // setRecords(res.records);
             setDropdownOptions(res.records);
         };
 
@@ -154,13 +153,13 @@ export default function SearchPage() {
     }, []);
 
 
+    const hasImageFilter = filteredAttr.some(filter => filter.name === 'With Images');
+    const searchTerm = filteredAttr.filter(filter => filter.name !== 'With Images').map(filter => filter.name).join('&');
     // Activates filters applied from the dropdown.
     // TODO: Likely causes complete crash the entire production server somehow. Investigate.
     useEffect(() => {
-        const hasImageFilter = filteredAttr.some(filter => filter.name === 'With Images');
-        const searchTerm = filteredAttr.filter(filter => filter.name !== 'With Images').map(filter => filter.name).join('&');
         console.log("Now checking for image with: /api/search?term=" + searchTerm);
-        const fetchUrl = hasImageFilter ? `/api/search?term=${searchTerm}&image=true` : `/api/search?term=${searchTerm}`;
+        const fetchUrl = `/api/search?term=${searchTerm}${hasImageFilter ? '&image=true' : ''}`;
 
         const getFilterResults = async () => {
             try {
@@ -176,8 +175,8 @@ export default function SearchPage() {
                 console.error(error);
             }
         };
-        //getFilterResults();       // This breaks search for now.
-    }, [filteredAttr, filteredResults]);
+        getFilterResults();       // This breaks search for now.
+    }, [filteredAttr]);
 
 
     const attrs = ["Shape", "Current Collection", "Previous Collection", "Provenance", "With Images"];
