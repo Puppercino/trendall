@@ -10,6 +10,7 @@ export async function GET(req) {
     let filterConditions = {};
 
     if (term) {
+        console.log("Search API: term ", term);
         const searchRegex = new RegExp(term, 'i'); // Case insensitive
         filterConditions.$and = [
             {
