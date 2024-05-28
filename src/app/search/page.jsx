@@ -51,7 +51,7 @@ const Attribute = ({ attribute, name, onValueChange, setFilteredAttr }) => {
 
             {/* Attribute dropdown button */}
             <button
-                className="mb-2 flex items-center justify-between rounded border-2 p-2 text-left"
+                className={`flex items-center justify-between border-2 p-2 text-left ${isEditing ? "rounded-t" : "rounded"}`}
                 onClick={() => {
                     setIsEditing(!isEditing);
                     if (!isEditing) {
@@ -66,15 +66,15 @@ const Attribute = ({ attribute, name, onValueChange, setFilteredAttr }) => {
             </button>
             {isEditing && name !== "With Images" && (
                 <>
-                    <input
+                    {/* <input
                         type="text"
                         value={value}
                         onChange={e => setValue(e.target.value)}
                         placeholder={`Enter ${name}`}
                         className="mb-1 rounded border-2 p-2"
                         onBlur={handleBlur}
-                    />
-                    <div className="border-2 p-1 pl-2">
+                    /> */}
+                    <div className="border-2 rounded-b p-1 pl-2">
                         {(showAll ? attribute : attribute.slice(0, 10)).map((record, index) => (
                             <button
                                 className="w-full border-b-2 p-1 text-left hover:bg-blue-200"
