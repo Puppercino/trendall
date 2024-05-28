@@ -158,7 +158,7 @@ export default function EditRecordForm({ id, ref_no, shape, curr_coll, prev_coll
                     value={newDescription} />
             </div>
 
-            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-fit">
+            <button className="w-fit rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700">
                 Update record
             </button>
 

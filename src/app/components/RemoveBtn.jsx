@@ -24,7 +24,7 @@ export default function RemoveBtn({ id }) {
     };
 
     return (
-        <button className="inline-flex items-center px-3 py-3 border border-red-500 text-red-500 text-md font-medium rounded-md hover:bg-red-500 hover:text-gray-100"
+        <button className="text-md inline-flex items-center rounded-md border border-red-500 p-3 font-medium text-red-500 hover:bg-red-500 hover:text-gray-100"
             onClick={removeRecord}>
             Delete Record
             <HiOutlineTrash className="ml-2" size={24} />
