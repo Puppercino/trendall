@@ -3,10 +3,8 @@
 import { RecordItem } from "@/app/components/RecordItem";
 
 export default async function RecordList({ records, limit = -1 }) {
-    let slicedRecords = records;
-    if (records === undefined && records.length > 0) {
-        slicedRecords = records.slice(0, limit);
-    }
+
+    let slicedRecords = records.slice(0, limit);
 
     return (
         <ul>
