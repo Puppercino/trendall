@@ -105,6 +105,7 @@ const SearchBar = ({ getRecordResults }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("Now fetching: /api/search?term=" + searchTerm);
         const res = await fetch(`/api/search?term=${searchTerm}`);
         if (res.ok) {
             const data = await res.json();
@@ -154,6 +155,7 @@ export default function SearchPage() {
     useEffect(() => {
         const hasImageFilter = filteredAttr.some(filter => filter.name === 'With Images');
         const searchTerm = filteredAttr.filter(filter => filter.name !== 'With Images').map(filter => filter.name).join('&');
+        console.log("Now checking for image with: /api/search?term=" + searchTerm);
         const fetchUrl = hasImageFilter ? `/api/search?term=${searchTerm}&image=true` : `/api/search?term=${searchTerm}`;
 
         const getFilterResults = async () => {
