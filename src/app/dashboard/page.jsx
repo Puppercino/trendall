@@ -2,7 +2,7 @@ import React from "react";
 import { Note } from "@/app/components/Note";
 import Record from "@/app/api/db/model/record_model";
 
-export default async function UserPage({}) {
+export default async function UserPage({ }) {
 
     const records = await Record;
     let record_count;
@@ -48,7 +48,7 @@ export default async function UserPage({}) {
                         <p>There are around <b>{record_count}</b> vase records.</p>
                     </Note>
                 </li>
-                <li>
+                {/* <li>
                     <Note>
                         <p>Image schema unknown.</p>
                     </Note>
@@ -57,7 +57,7 @@ export default async function UserPage({}) {
                     <Note>
                         <p>There are a unknown amount of original images.</p>
                     </Note>
-                </li>
+                </li> */}
             </ul>
         </>
     )

@@ -1,4 +1,4 @@
-import {DashLink} from "@/app/components/DashLink";
+import { DashLink } from "@/app/components/DashLink";
 import React from "react";
 
 export default function UserLayout({ children }) {
@@ -10,18 +10,18 @@ export default function UserLayout({ children }) {
                     <DashLink active={true}
                         href={"/dashboard/"}
                         header={"Heartbeat"}
-                        description={"Database heartbeat and statistics."}
-                    ></DashLink>
-                    <DashLink
+                        description={"Database heartbeat and statistics."}>
+                    </DashLink>
+                    {/* <DashLink
                         href={"/dashboard/profile"}
                         header={"Your Profile"}
-                        description={"View and update your profile information."}
-                    ></DashLink>
+                        description={"View and update your profile information."}>
+                    </DashLink> */}
                     <DashLink
                         href={"/record/"}
                         header={"Record List"}
-                        description={"List of every vase record in the database."}
-                    ></DashLink>
+                        description={"List of every vase record in the database."}>
+                    </DashLink>
                 </div>
                 {/* Controls Panel */}
                 <div className="h-full grow rounded border p-3">

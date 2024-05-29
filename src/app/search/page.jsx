@@ -136,7 +136,7 @@ const SearchBar = ({ getRecordResults }) => {
 export default function SearchPage() {
 
     const [limit, setLimit] = useState(30); // Limit the number of records displayed
-    const [searchResults, setSearchResults] = useState([]);
+    const [searchResults, setSearchResults] = useState([]); // TODO: delete this
     const [filteredAttr, setFilteredAttr] = useState([]);
     const [dropdownOptions, setDropdownOptions] = useState([]);
     const [records, setRecords] = useState([]);
