@@ -16,7 +16,7 @@ export default function AboutPage() {
             <div className="mb-10 flex flex-row">
                 <Image src={"/home_media/home_vase.png"} alt={"Trendall Center image"} height={400} width={400}></Image>
                 <p className="ml-5">
-                    <a href="https://www.latrobe.edu.au/research/centres/trendall" className="underline text-blue-500">
+                    <a href="https://www.latrobe.edu.au/research/centres/trendall" className="text-blue-500 underline">
                         A.D. Trendall Research Centre for Ancient Mediterranean Studies
                     </a>{" "}
                     at La Trobe University is dedicated to promoting research in Ancient Mediterranean studies, particularly
@@ -28,7 +28,7 @@ export default function AboutPage() {
             <div className="mb-10 flex flex-row">
                 <Image src={"/home_media/home_trendall.png"} alt={"Trendall avatar image"} height={200} width={200}></Image>
                 <p className="ml-5">
-                    <a href="https://adb.anu.edu.au/biography/trendall-arthur-dale-976" className="underline text-blue-500">
+                    <a href="https://adb.anu.edu.au/biography/trendall-arthur-dale-976" className="text-blue-500 underline">
                         Arthur Dale Trendall
                     </a>{" "}
                     was a renowned historian of Greek art and a leading authority on red-figure vases from South Italy and Sicily during
