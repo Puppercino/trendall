@@ -26,6 +26,9 @@ describe('Edit record spec', () => {
 
       // Submit the form
       cy.get('button').click();
+
+      // Assert that the current URL is the record page
+      cy.url().should('include', `/record/${recordId}`);
     });
   })
 })

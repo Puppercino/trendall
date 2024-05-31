@@ -8,6 +8,7 @@ describe('Add record spec', () => {
 
     // Click on the link to the all records page then add record page
     cy.get('a[href="/record"]').first().click();
+    cy.wait(2000);
     cy.get('a[href="/add_record"]').first().click();
 
     // Enter the record details
@@ -16,5 +17,8 @@ describe('Add record spec', () => {
 
     // Submit the form
     cy.get('button[type="submit"]').click();
+
+    // Assert that the current URL is the record page
+    cy.url().should('include', '/record');
   })
 })

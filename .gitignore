@@ -4,3 +4,4 @@
 /.next/
 .env
 /qodana.yaml
+/cypress/screenshots/

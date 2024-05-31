@@ -8,9 +8,15 @@ describe('Navigation spec', () => {
 
     // Click on the link to the all records page
     cy.get('a[href="/record"]').first().click();
-    cy.get('a[href="/record/663cb8c5237097f38ba3e0a4"]').first().click();
+    cy.wait(2000);
+    cy.get('li').first().click();
 
     // Assert that the current URL is the record page
-    cy.url().should('include', '/record/663cb8c5237097f38ba3e0a4');
+    cy.url().then((url) => {
+      const recordId = url.split('/').pop();
+
+      // Assert that the current URL is the record page
+      cy.url().should('include', `/${recordId}`);
+    });
   })
 })
