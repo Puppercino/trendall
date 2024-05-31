@@ -1,3 +1,5 @@
+import { getServerSession } from "next-auth/next";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 export const dynamic = "force-dynamic";
 import RecordList from "@/app/components/RecordList";
 import Link from "next/link";
@@ -21,16 +23,19 @@ const getRecords = async () => {
 
 export default async function AllRecordsPage() {
 
+    const session = await getServerSession(options);
     const { records } = await getRecords();
 
     return (
         <ul>
             <div className="flex items-center justify-between">
                 <h1>All Records</h1>
-                <Link className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-                    href={'/add_record'}>
-                    Add record
-                </Link>
+                {session && (
+                    <Link className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                        href={'/add_record'}>
+                        Add record
+                    </Link>
+                )}
             </div>
             <RecordList records={records} />
         </ul>

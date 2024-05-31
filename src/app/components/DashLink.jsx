@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 
-export function DashLink({href, header, description, active}) {
+export function DashLink({ href, header, description, active }) {
 
     let linkStateClasses;
 
@@ -13,10 +13,10 @@ export function DashLink({href, header, description, active}) {
     }
 
     return (
-        <Link href={ href }>
+        <Link href={href}>
             <div className={linkStateClasses}>
-                <h2 className="text-lg font-bold">{ header }</h2>
-                <p className="text-sm">{ description }</p>
+                <h2 className="text-lg font-bold">{header}</h2>
+                <p className="text-sm">{description}</p>
             </div>
         </Link>
     )

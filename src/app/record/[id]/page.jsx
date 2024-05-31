@@ -1,3 +1,5 @@
+import { getServerSession } from "next-auth/next";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 import Image from "next/image";
 import RemoveBtn from "@/app/components/RemoveBtn";
 import { HiPencilAlt } from "react-icons/hi";
@@ -22,6 +24,7 @@ const getOneRecord = async (id) => {
 
 export default async function RecordPage({ params }) {
 
+    const session = await getServerSession(options);
     const { record } = await getOneRecord(params.id);
 
     let recordImage = record.image ? `/images/${record.image}` : "/vase_placeholder.png";
@@ -41,18 +44,19 @@ export default async function RecordPage({ params }) {
             </div>
 
             <div className="w-2/3">
-                <div className="mb-20 flex justify-end">
-                    <Link
-                        href={`/edit_record/${record._id}`}
-                        className="text-md mr-4 inline-flex items-center rounded-md border border-blue-800 p-3 text-blue-800 hover:bg-blue-800 hover:text-gray-100">
-                        Edit Record
-                        <HiPencilAlt className="ml-2" size={24} />
-                    </Link>
-                    <RemoveBtn
-                        id={record._id} />
-                </div>
+                {session && (
+                    <div className="flex justify-end">
+                        <Link
+                            href={`/edit_record/${record._id}`}
+                            className="text-md mr-4 inline-flex items-center rounded-md border border-blue-800 p-3 text-blue-800 hover:bg-blue-800 hover:text-gray-100">
+                            Edit Record
+                            <HiPencilAlt className="ml-2" size={24} />
+                        </Link>
+                        <RemoveBtn id={record._id} />
+                    </div>
+                )}
 
-                <div className="flex flex-col justify-start">
+                <div className="flex flex-col justify-center h-full">
                     <h1>Record information:</h1>
                     <p>Shape: {record.shape}</p>
                     <p>Current Collection: {curr_coll}</p>

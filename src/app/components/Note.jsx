@@ -1,4 +1,4 @@
-export function Note({type, children}) {
+export function Note({ type, children }) {
     let noteClasses;
     switch (String(type)) {
         case "info":
@@ -26,7 +26,7 @@ export function Note({type, children}) {
 
     return (
         <div className={"my-2 rounded border p-2 " + noteClasses}>
-            { children }
+            {children}
         </div>
     )
 }

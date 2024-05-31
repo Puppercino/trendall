@@ -1,4 +1,5 @@
 "use client";
+
 import { NavLink } from "@/app/components/NavLink";
 import { usePathname } from "next/navigation";
 
