@@ -56,7 +56,7 @@ export default async function RecordPage({ params }) {
                     </div>
                 )}
 
-                <div className="flex flex-col justify-center h-full">
+                <div className="flex h-full flex-col justify-center">
                     <h1>Record information:</h1>
                     <p>Shape: {record.shape}</p>
                     <p>Current Collection: {curr_coll}</p>
