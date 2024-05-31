@@ -19,6 +19,8 @@ export default function RemoveBtn({ id }) {
                 throw new Error('Failed to delete record');
             }
 
+            alert('Record successfully deleted');
+            router.push('/record'); // Navigate to record screen
             router.refresh();
         }
     };

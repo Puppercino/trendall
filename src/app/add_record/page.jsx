@@ -42,6 +42,7 @@ export default function AddRecord() {
                 throw new Error('Failed to create record');
             }
 
+            alert('Record successfully added');
             router.push('/record'); // Navigate to record screen
             router.refresh();
 

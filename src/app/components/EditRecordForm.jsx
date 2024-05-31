@@ -51,6 +51,7 @@ export default function EditRecordForm({ id, ref_no, shape, curr_coll, prev_coll
                 throw new Error('Failed to update record');
             }
 
+            alert('Record successfully updated');
             router.push(`/record/${id}`); // Navigate to record page screen
             router.refresh();
 

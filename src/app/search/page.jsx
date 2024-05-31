@@ -136,16 +136,14 @@ const SearchBar = ({ getRecordResults }) => {
 export default function SearchPage() {
 
     const [limit, setLimit] = useState(30); // Limit the number of records displayed
-    const [searchResults, setSearchResults] = useState([]); // TODO: delete this
     const [filteredAttr, setFilteredAttr] = useState([]);
     const [dropdownOptions, setDropdownOptions] = useState([]);
     const [records, setRecords] = useState([]);
 
-    // Get initial set of records and dropdown options from API.
+    // Get initial set of records and dropdown options from API
     useEffect(() => {
         const fetchRecords = async () => {
             const res = await getRecords();
-            // setRecords(res.records);
             setDropdownOptions(res.records);
         };
 
@@ -153,8 +151,7 @@ export default function SearchPage() {
     }, []);
 
 
-    // Activates filters applied from the dropdown.
-    // TODO: Likely causes complete crash the entire production server somehow. Investigate.
+    // Activates filters applied from the dropdown
     useEffect(() => {
         const hasImageFilter = filteredAttr.some(filter => filter.name === 'With Images');
         const searchTerm = filteredAttr.filter(filter => filter.name !== 'With Images').map(filter => filter.name).join('&');
@@ -175,7 +172,7 @@ export default function SearchPage() {
                 console.error(error);
             }
         };
-        getFilterResults();       // This breaks search for now.
+        getFilterResults();
     }, [filteredAttr]);
 
 
