@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall, Trong Vinh Luu
+*/
+
 import mongoose from "mongoose";
 
 const dbConnection = async () => {

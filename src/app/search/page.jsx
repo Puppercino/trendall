@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall, Trong Vinh Luu, Yunhao Huang
+*/
+
 "use client";
 
 import React, { useState, useEffect } from 'react';

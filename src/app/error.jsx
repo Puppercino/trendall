@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall
+*/
+
 "use client";
 
 export default function ErrorPage() {

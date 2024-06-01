@@ -1,3 +1,7 @@
+"""
+Authors: Trong Vinh Luu
+"""
+
 import json, re
 
 # Create a list of shape references

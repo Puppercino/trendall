@@ -1,5 +1,8 @@
-import Link from "next/link";
+/*
+Authors: Jordan Lyall
+*/
 
+import Link from "next/link";
 
 export function DashLink({ href, header, description, active }) {
 

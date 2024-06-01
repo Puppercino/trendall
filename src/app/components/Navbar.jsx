@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall
+*/
+
 "use client";
 
 import { NavLink } from "@/app/components/NavLink";

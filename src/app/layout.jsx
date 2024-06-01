@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall
+*/
+
 import { Fira_Sans } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/app/components/Navbar";

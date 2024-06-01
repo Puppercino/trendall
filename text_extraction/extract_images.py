@@ -1,3 +1,7 @@
+"""
+Authors: Trong Vinh Luu
+"""
+
 import os, sys, pdfplumber, re
 
 pdf_path = "RVP.pdf"  # Add RVP.pdf to the same directory as this file

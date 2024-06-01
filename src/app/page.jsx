@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall, Trong Vinh Luu
+*/
+
 import Link from "next/link";
 
 export default function HomePage() {

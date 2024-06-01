@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall
+*/
+
 import { UserProfile } from "@/app/components/UserProfile";
 import { UserMenu } from "@/app/components/UserMenu";
 

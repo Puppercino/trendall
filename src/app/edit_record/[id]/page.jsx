@@ -1,3 +1,7 @@
+/*
+Authors: Trong Vinh Luu
+*/
+
 import EditRecordForm from "@/app/components/EditRecordForm"
 
 const getRecordById = async (id) => {

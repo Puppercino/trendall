@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall
+*/
+
 import { DashLink } from "@/app/components/DashLink";
 import React from "react";
 

@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall
+*/
+
 export function UserMenu() {
     return (
         <div className="rounded border border-stone-200 p-3">

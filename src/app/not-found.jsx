@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall
+*/
+
 export default function notFound() {
     return (
         <>

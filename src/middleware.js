@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall
+*/
+
 export { default } from "next-auth/middleware";
 
 export const config = {

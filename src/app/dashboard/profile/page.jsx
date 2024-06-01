@@ -1,6 +1,10 @@
+/*
+Authors: Jordan Lyall
+*/
+
 import React from "react";
 
-export default async function ChangeProfilePage({}) {
+export default async function ChangeProfilePage({ }) {
     return (
         <>
             <h1>

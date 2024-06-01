@@ -1,3 +1,7 @@
+"""
+Authors: Jordan Lyall
+"""
+
 # This python script generates web compatible thumbnails (JPEG) from
 # TIF images provided by the Trendall Centre.
 import os

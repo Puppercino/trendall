@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall, Trong Vinh Luu
+*/
+
 import { getServerSession } from "next-auth/next";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 export const dynamic = "force-dynamic";

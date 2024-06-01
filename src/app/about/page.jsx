@@ -1,3 +1,7 @@
+/*
+Authors: Trong Vinh Luu
+*/
+
 import Image from "next/image";
 
 export default function AboutPage() {

@@ -1,3 +1,7 @@
+"""
+Authors: Trong Vinh Luu
+"""
+
 import json
 from pymongo import MongoClient
 

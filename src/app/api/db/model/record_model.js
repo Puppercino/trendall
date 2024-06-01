@@ -1,6 +1,9 @@
+/*
+Authors: Jordan Lyall, Trong Vinh Luu
+*/
+
 import mongoose, { Schema } from 'mongoose';
 import dbConnection from "@/app/api/db/db";
-
 
 // Record Schema for MongoDB, originally written by Vinh in Express.
 const recordSchema = new Schema({

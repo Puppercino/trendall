@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall
+*/
+
 export function Note({ type, children }) {
     let noteClasses;
     switch (String(type)) {

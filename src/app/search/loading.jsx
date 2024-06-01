@@ -1,3 +1,7 @@
+/*
+Authors: Trong Vinh Luu
+*/
+
 export default function LoadingSearchPage() {
     return (
         <>

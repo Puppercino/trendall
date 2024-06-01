@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall
+*/
+
 import CognitoProvider from "next-auth/providers/cognito";
 
 // Plug Amazon Cognito into NextAuth.

@@ -1,3 +1,7 @@
+/*
+Authors: Trong Vinh Luu
+*/
+
 import dbConnection from "@/app/api/db/db";
 import Record from "../model/record_model";
 import { NextResponse } from "next/server";

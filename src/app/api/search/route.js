@@ -1,3 +1,7 @@
+/*
+Authors: Trong Vinh Luu, Yunhao Huang
+*/
+
 export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import Record from "@/app/api/db/model/record_model";

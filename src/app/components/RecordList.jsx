@@ -1,3 +1,7 @@
+/*
+Authors: Trong Vinh Luu
+*/
+
 "use client";
 
 import { RecordItem } from "@/app/components/RecordItem";

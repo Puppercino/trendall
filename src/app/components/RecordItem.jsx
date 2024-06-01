@@ -1,3 +1,7 @@
+/*
+Authors: Trong Vinh Luu
+*/
+
 "use client";
 
 import Image from "next/image";

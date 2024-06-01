@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall
+*/
+
 import React from "react";
 import { Note } from "@/app/components/Note";
 import Record from "@/app/api/db/model/record_model";

@@ -1,3 +1,7 @@
+/*
+Authors: Jordan Lyall
+*/
+
 export function UserProfile() {
     return (
         <div className="grow rounded border border-stone-200 p-3">
